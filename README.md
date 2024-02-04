@@ -17,20 +17,21 @@ Develop a task manager application using C# that falls under the category of app
 [image]
 
 #### 2.2. Use Case
-| Class | Description |
-| --- | --- |
+The user interacts with the Task Manager App through various actions.
 
-[image]
-
-#### 2.3. Component
-| Class | Description |
+| Action | Description |
 | --- | --- |
+| Create Task List | The user can create a new task list. |
+| Add Task | The user can add a new task to the task list. |
+| Edit Task | The user can modify the attributes of an existing task. |
+| Remove Task | The user can delete a task from the task list. |
+| Remove Task List | The user can delete an entire task list. |
 
 [image]
 
 ### 3. Features
 | Name | Version | Date | Note |
-| --- | --- |
+| --- | --- | --- | --- |
 | Visual Studio 2022 | 17.8 | January 22, 2024 | The official source of the project. |
 | WPF | 4.5 | February 6, 2023 | Giving a visual presentation of the project. | 
 | .NET Community Toolkit | 8.2 | April 27, 2023 | Including libraries like Microsoft MVVM Toolkit, Common, Diagnostics, HighPerformance |
@@ -96,27 +97,38 @@ Ensure the Task Manager application functions as intended, providing users with 
 #### 5.1 Must-Have
 | Title | Description |
 | --- | --- |
-| --- | As a user... |
+| Create a task list | As a user, I want to be able to create a new task list to organize my tasks effectively. |
+| Add a task | As a user, I want to add a new task to the task list with attributes like name, due date, priority, and status. |
+| Edit a task | As a user, I want to edit an existing task's attributes to keep information up-to-date. |
+| Remove a task | As a user, I want to delete a task from the list when it is no longer relevant. |
 
 #### 5.2 Should-Have
 | Title | Description |
 | --- | --- |
-| --- | As a user... |
+| Sort tasks by due date | As a user, I want to sort tasks based on due date for better organization. |
+| Sort tasks by priority | As a user, I want to sort tasks based on priority for better organization. |
+| Sort tasks by status | As a user, I want to sort tasks based on status for better organization. |
+| Filter tasks by due date | As a user, I want to apply filters to display tasks based on due date. |
+| Filter tasks by priority | As a user, I want to apply filters to display tasks based on priority. |
+| Filter tasks by status | As a user, I want to apply filters to display tasks based on status. |
 
 #### 5.3 Could-Have
 | Title | Description |
 | --- | --- |
-| --- | As a user... |
+| Task List Interactions | As a user, I want to interact with the task list, selecting and viewing tasks easily. |
+| User Interface Responsiveness | As a user, I expect the application's user interface to be responsive to different window sizes. |
 
 #### 5.4 Won't-Have
 | Title | Description |
 | --- | --- |
-| --- | As a user... |
+| Add image | As a user, I don't need to add an image. |
+| Add video | As a user, I don't need to add a video. |
+| Add document | As a user, I don't need to add a document. |
 
 ### 6. Timetable
 | Date | Title | Description | 
 | --- | --- | --- |
-| 2024-02-04 | Documentation | Create the UML, a use case, and a component diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
+| 2024-02-04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
 | 2024-02-05 | Development | Building up the structure of the project within Visual Studio. |
 | 2024-02-06 | Development | Building up the necessary methods of the project. |
 | 2024-02-07 | Development | Building up the remaining methods of the project. |
@@ -131,22 +143,26 @@ Ensure the Task Manager application functions as intended, providing users with 
 This application is used to increase productivity and it was a great way to practice the C# programming language for something useful.
 
 #### 7.2 Getting Started
-...
+| Step | Title | Description |
+| --- | --- | --- |
+| 1 |   |   |
+| 2 |   |   |
+| 3 |   |   |
 
 #### 7.3 User Interface
 | Pages | Description |
 | --- | --- |
-| Home | --- |
-| Task List | --- |
+| Home |   |
+| Task List |   |
 
 #### 7.4 Task Management
 | Action | Description |
 | --- | --- |
-| Create | --- |
-| Edit | --- |
-| Delete | --- |
-| Sort | --- |
-| Filter | --- |
+| Create |   |
+| Edit |   |
+| Delete |   |
+| Sort |   |
+| Filter |   |
 
 ### 8. Additional Information
 Virag Szabo | BS | Information Technology | February 2024
