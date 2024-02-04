@@ -14,7 +14,7 @@ Develop a task manager application using C# that falls under the category of app
 | Priority | This enum represents the priority of a task (High, Medium, Low). |
 | Status | This enum represents the status of a task (Completed, In Progress, Not Started). |
 
-[image]
+![The UML Diagram](Diagrams/uml.png)
 
 #### 2.2. Use Case
 The user interacts with the Task Manager App through various actions.
@@ -27,7 +27,7 @@ The user interacts with the Task Manager App through various actions.
 | Remove Task | The user can delete a task from the task list. |
 | Remove Task List | The user can delete an entire task list. |
 
-[image]
+![The Use Case Diagram](Diagrams/usecase.png)
 
 ### 3. Features
 | Name | Version | Date | Note |
@@ -130,14 +130,14 @@ Ensure the Task Manager application functions as intended, providing users with 
 
 | Date | Title | Description | 
 | --- | --- | --- |
-| 2024-02-04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
-| 2024-02-05 | Development | Building up the structure of the project within Visual Studio. |
-| 2024-02-06 | Development | Building up the necessary methods of the project. |
-| 2024-02-07 | Development | Building up the remaining methods of the project. |
-| 2024-02-08 | Development | Building up the user interface of the Windows application. |
-| 2024-02-09 | Development | Building up the user interface of the Windows application. |
-| 2024-02-10 | Testing | Testing out the different actions of the Windows application. |
-| 2024-02-11 | Documentation | Write a User Manual for the Windows application.  |
+| 02-04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
+| 02-05 | Development | Building up the structure of the project within Visual Studio. |
+| 02-06 | Development | Building up the necessary methods of the project. |
+| 02-07 | Development | Building up the remaining methods of the project. |
+| 02-08 | Development | Building up the user interface of the Windows application. |
+| 02-09 | Development | Building up the user interface of the Windows application. |
+| 02-10 | Testing | Testing out the different actions of the Windows application. |
+| 02-11 | Documentation | Write a User Manual for the Windows application.  |
 
 ### 7. User Manual
 #### 7.1 Overview
