@@ -126,6 +126,8 @@ Ensure the Task Manager application functions as intended, providing users with 
 | Add document | As a user, I don't need to add a document. |
 
 ### 6. Timetable
+*These dates might be changed during the process of the project.*
+
 | Date | Title | Description | 
 | --- | --- | --- |
 | 2024-02-04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
@@ -136,7 +138,6 @@ Ensure the Task Manager application functions as intended, providing users with 
 | 2024-02-09 | Development | Building up the user interface of the Windows application. |
 | 2024-02-10 | Testing | Testing out the different actions of the Windows application. |
 | 2024-02-11 | Documentation | Write a User Manual for the Windows application.  |
-*The dates might be changed during the process of the project.*
 
 ### 7. User Manual
 #### 7.1 Overview
