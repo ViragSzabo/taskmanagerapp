@@ -14,7 +14,7 @@ Develop a task manager application using C# that falls under the category of app
 | Priority | This enum represents the priority of a task (High, Medium, Low). |
 | Status | This enum represents the status of a task (Completed, In Progress, Not Started). |
 
-![Diagrams/uml.png]
+![The UML Diagram](Diagrams/uml.png)
 
 #### 2.2. Use Case
 The user interacts with the Task Manager App through various actions.
@@ -27,7 +27,7 @@ The user interacts with the Task Manager App through various actions.
 | Remove Task | The user can delete a task from the task list. |
 | Remove Task List | The user can delete an entire task list. |
 
-![Diagrams/usecase.png]
+![The Use Case Diagram](Diagrams/usecase.png)
 
 ### 3. Features
 | Name | Version | Date | Note |
