@@ -16,6 +16,112 @@ using System.Windows.Shapes;
 
 namespace TaskManagerApp
 {
+    public enum Priority
+    {
+        High,
+        Medium,
+        Low
+    }
+
+    public enum Status
+    {
+        Completed,
+        InProgress,
+        NotStarted
+    }
+
+    public class Task
+    {
+        public string Name { get; set; }
+        public DateTime? DueDate { get; set; }
+        public Priority Priority { get; set; }
+        public Status Status { get; set; }
+    }
+
+    public class TaskList
+    {
+        public ObservableCollection<Task> Tasks { get; set; }
+
+        public TaskList()
+        {
+            Tasks = new ObservableCollection<Task>();
+        }
+
+        public void AddTask(Task task)
+        {
+            Tasks.Add(task);
+        }
+
+        public void EditTask(int index, Task editedTask)
+        {
+            if(index >= 0 && index < Tasks.Count)
+            {
+                Tasks[index] = editedTask;
+            }
+        }
+
+        public void RemoveTask(int index)
+        {
+            if (index >= 0 && index < Tasks.Count)
+            {
+                Tasks.RemoveAt(index);
+            }
+        }
+
+        public void SortTasksByName()
+        {
+            Tasks = new ObservableCollection<Task>(Tasks.OrderBy(task => task.Name));
+        }
+
+        public void SortTasksByDueDate()
+        {
+            Tasks = new ObservableCollection<Task>(Tasks.OrderBy(task => task.DueDate));
+        }
+
+        public void FilterTasksByStatus(Status status)
+        {
+            Tasks = new ObservableCollection<Task>(Tasks.Where(task => task.Status == status));
+        }
+    }
+
+    public class TaskManager
+    {
+        public List<TaskList> TaskLists { get; private set; }
+        public TaskList CurrentTaskList { get; set; }
+
+        public TaskManager()
+        {
+            TaskLists = new List<TaskList>();
+            CurrentTaskList = new TaskList();
+        }
+
+        public void CreateTaskList()
+        {
+            TaskList newList = new TaskList();
+            TaskLists.Add(newList);
+        }
+
+        public void RemoveTaskList(TaskList taskList)
+        {
+            TaskLists.Remove(taskList);
+        }
+
+        public void SortTasksByName()
+        {
+            CurrentTaskList.SortTasksByName();
+        }
+
+        public void SortTasksByDueDate()
+        {
+            CurrentTaskList.SortTasksByDueDate();
+        }
+
+        public void FilterTasksByStatus(Status status)
+        {
+            CurrentTaskList.FilterTasksByStatus(status);
+        }
+    }
+
     public partial class MainWindow : Window
     {
         public ObservableCollection<string> Tasks { get; set; }
@@ -25,6 +131,9 @@ namespace TaskManagerApp
             InitializeComponent();
             Tasks = new ObservableCollection<string>();
             taskListBox.ItemsSource = Tasks;
+
+            // Set initial button visibility
+            TriggerButtonVisibility(true, true, true, false);
         }
         
         private void AddTask_Click(object sender, RoutedEventArgs e)
@@ -41,11 +150,8 @@ namespace TaskManagerApp
         {
             if(taskListBox.SelectedIndex != -1)
             {
-                // Hide the save button
-                saveButton.Visibility = Visibility.Collapsed;
-
-                // Show the edit button
-                editButton.Visibility = Visibility.Visible;
+                // Show the necessary buttons
+                TriggerButtonVisibility(true, false, true, true);
 
                 // Retrieve the selected task
                 string selectedTask = Tasks[taskListBox.SelectedIndex];
@@ -60,11 +166,8 @@ namespace TaskManagerApp
 
         public void SaveEditedTask_Click(object sender, RoutedEventArgs e)
         {
-            // Hide the edit button before
-            editButton.Visibility = Visibility.Collapsed;
-
-            // Show the save button
-            saveButton.Visibility = Visibility.Visible;
+            // Show the necessary buttons
+            TriggerButtonVisibility(true, true, true, false);
 
             // Get the edited tasks from the task input textbox
             string editedTask = taskInput.Text.Trim();
@@ -74,18 +177,24 @@ namespace TaskManagerApp
 
             // Clear the taskInput Textbox
             taskInput.Clear();
-
-            // Hide the save button again
-            saveButton.Visibility = Visibility.Collapsed;
         }
 
         private void RemoveTask_Click(object sender, RoutedEventArgs e)
         {
-            if(taskListBox.SelectedIndex >= 0)
+
+            if (taskListBox.SelectedIndex >= 0)
             {
                 Tasks.RemoveAt(taskListBox.SelectedIndex);
                 taskInput.Clear();
             }
+        }
+
+        private void TriggerButtonVisibility(bool add, bool edit, bool remove, bool save)
+        {
+            addButton.Visibility = add ? Visibility.Visible : Visibility.Collapsed;
+            editButton.Visibility = edit ? Visibility.Visible : Visibility.Collapsed;
+            removeButton.Visibility = remove ? Visibility.Visible : Visibility.Collapsed;
+            saveButton.Visibility = save ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
