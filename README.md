@@ -157,14 +157,14 @@ Ensure the Task Manager application functions as intended, providing users with 
 
 | Date | Title | Description | 
 | --- | --- | --- |
-| 02-04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
-| 02-05 | Development | Building up the structure of the project within Visual Studio. |
-| 02-06 | Development | Building up the necessary methods of the project. |
-| 02-07 | Development | Building up the remaining methods of the project. |
-| 02-08 | Development | Building up the user interface of the Windows application. |
-| 02-09 | Development | Building up the user interface of the Windows application. |
-| 02-10 | Testing | Testing out the different actions of the Windows application. |
-| 02-11 | Documentation | Write a User Manual for the Windows application.  |
+| February 04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
+| February 05 | Development | Building up the structure of the project within Visual Studio. |
+| February 06 | Development | Building up the necessary methods of the project. |
+| February 07 | Development | Building up the remaining methods of the project. |
+| February 08 | Development | Building up the user interface of the Windows application. |
+| February 09 | Development | Building up the user interface of the Windows application. |
+| February 10 | Testing | Testing out the different actions of the Windows application. |
+| February 11 | Documentation | Write a User Manual for the Windows application.  |
 
 ### 7. User Manual
 #### 7.1 Overview
