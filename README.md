@@ -61,7 +61,7 @@ The user interacts with the Task Manager App through various actions.
 | --- | --- | --- | --- |
 | Visual Studio 2022 | 17.8 | January 22, 2024 | The official source of the project. |
 | WPF | 4.5 | February 6, 2023 | Giving a visual presentation of the project. | 
-| .NET Community Toolkit | 8.2 | April 27, 2023 | Including libraries like Microsoft MVVM Toolkit, Common, Diagnostics, HighPerformance |
+| .NET Framework | 7.0 | November 2022| The ASP.NET Core Runtime enables you to run existing web/server applications. |
 | GitHub | 3.11.4 | January 30, 2024 | Version Control for the project. |
 
 ### 4. Test Plan
@@ -157,14 +157,14 @@ Ensure the Task Manager application functions as intended, providing users with 
 
 | Date | Title | Description | 
 | --- | --- | --- |
-| 02-04 | Documentation | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
-| 02-05 | Development | Building up the structure of the project within Visual Studio. |
-| 02-06 | Development | Building up the necessary methods of the project. |
-| 02-07 | Development | Building up the remaining methods of the project. |
-| 02-08 | Development | Building up the user interface of the Windows application. |
-| 02-09 | Development | Building up the user interface of the Windows application. |
-| 02-10 | Testing | Testing out the different actions of the Windows application. |
-| 02-11 | Documentation | Write a User Manual for the Windows application.  |
+| February 4 | Start | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
+| February 5 | Dev | Building up the structure of the project within Visual Studio. |
+| February 6 | Dev | Building up the necessary methods of the project. |
+| February 7 | Dev | Building up the remaining methods of the project. |
+| February 8 | Dev | Building up the user interface of the Windows application. |
+| February 9 | Dev | Building up the user interface of the Windows application. |
+| February 10 | Test | Testing out the different actions of the Windows application. |
+| February 11 | End | Write a User Manual for the Windows application.  |
 
 ### 7. User Manual
 #### 7.1 Overview
