@@ -61,7 +61,7 @@ The user interacts with the Task Manager App through various actions.
 | --- | --- | --- | --- |
 | Visual Studio 2022 | 17.8 | January 22, 2024 | The official source of the project. |
 | WPF | 4.5 | February 6, 2023 | Giving a visual presentation of the project. | 
-| .NET Community Toolkit | 8.2 | April 27, 2023 | Including libraries like Microsoft MVVM Toolkit, Common, Diagnostics, HighPerformance |
+| .NET Framework | 7.0 | November 2022| The ASP.NET Core Runtime enables you to run existing web/server applications. |
 | GitHub | 3.11.4 | January 30, 2024 | Version Control for the project. |
 
 ### 4. Test Plan
