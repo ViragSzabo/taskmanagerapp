@@ -17,8 +17,34 @@
             <Button x:Name="removeButton" Content="Remove" Click="RemoveTask_Click" Width="50"/>
         </StackPanel>
 
-        <ListBox x:Name="taskListBox" Grid.Row="1" Margin="10">
-            <!-- This is where tasks will be displayed -->
+        <!-- Data Table -->
+        <ListBox x:Name="taskListBox" Grid.Row="1" Margin="10,10,10,10" av:ItemsSource="{av:SampleData ItemCount=5}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header Row -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                            <TextBlock Text="Name" FontWeight="Bold" Margin="0,0,20,0"/>
+                            <TextBlock Text="Due Date" FontWeight="Bold" Margin="0,0,60,0"/>
+                            <TextBlock Text="Priority" FontWeight="Bold" Margin="0,0,60,0"/>
+                            <TextBlock Text="Status" FontWeight="Bold"/>
+                        </StackPanel>
+
+                            <!-- Data Rows -->
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+                            <TextBlock Text="{Binding Name}" Margin="0,0,20,0"/>
+                            <TextBlock Text="{Binding DueDate, StringFormat='DueDate: {0:MM/dd/yyyy}'}" Margin="0,0,20,0"/>
+                            <TextBlock Text="{Binding Priority, StringFormat='Priority: {0}'}" Margin="0,0,20,0"/>
+                            <TextBlock Text="{Binding Status, StringFormat='Status: {0}'}"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
 </Window>

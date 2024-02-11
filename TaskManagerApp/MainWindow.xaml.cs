@@ -36,6 +36,15 @@ namespace TaskManagerApp
         public DateTime? DueDate { get; set; }
         public Priority Priority { get; set; }
         public Status Status { get; set; }
+
+        public Task(string givenName)
+        {
+            this.Name = givenName;
+            this.DueDate = DateTime.Now;
+            this.Priority = Priority.Medium;
+            this.Status = Status.NotStarted;
+
+        }
     }
 
     public class TaskList
@@ -124,12 +133,13 @@ namespace TaskManagerApp
 
     public partial class MainWindow : Window
     {
-        public ObservableCollection<string> Tasks { get; set; }
+        public ObservableCollection<Task> Tasks { get; set; }
+        private Task selectedTask { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
-            Tasks = new ObservableCollection<string>();
+            Tasks = new ObservableCollection<Task>();
             taskListBox.ItemsSource = Tasks;
 
             // Set initial button visibility
@@ -138,8 +148,10 @@ namespace TaskManagerApp
         
         private void AddTask_Click(object sender, RoutedEventArgs e)
         {
-            string newTask = taskInput.Text.Trim();
-            if(!string.IsNullOrEmpty(newTask) )
+            string newTaskName = taskInput.Text.Trim();
+            Task newTask = new Task(newTaskName);
+
+            if (!string.IsNullOrEmpty(newTaskName))
             {
                 Tasks.Add(newTask);
                 taskInput.Clear();
@@ -148,16 +160,16 @@ namespace TaskManagerApp
 
         private void EditTask_Click(object sender, RoutedEventArgs e)
         {
-            if(taskListBox.SelectedIndex != -1)
-            {
-                // Show the necessary buttons
-                TriggerButtonVisibility(true, false, true, true);
+            // Show the necessary buttons
+            TriggerButtonVisibility(false, false, true, true);
 
+            if (taskListBox.SelectedIndex != -1)
+            {
                 // Retrieve the selected task
-                string selectedTask = Tasks[taskListBox.SelectedIndex];
+                selectedTask = Tasks[taskListBox.SelectedIndex];
 
                 //Show the selected task in the taskInput Textbox for editing
-                taskInput.Text = selectedTask;
+                taskInput.Text = selectedTask.Name;
 
                 // Remove the selected task from the Tasks collection
                 Tasks.RemoveAt(taskListBox.SelectedIndex);
@@ -166,17 +178,26 @@ namespace TaskManagerApp
 
         public void SaveEditedTask_Click(object sender, RoutedEventArgs e)
         {
-            // Show the necessary buttons
-            TriggerButtonVisibility(true, true, true, false);
+            if (selectedTask != null)
+            {
+                // Get the edited tasks from the task input textbox
+                string editedTaskName = taskInput.Text.Trim();
 
-            // Get the edited tasks from the task input textbox
-            string editedTask = taskInput.Text.Trim();
+                // Update the selected task
+                selectedTask.Name = editedTaskName;
 
-            // Add the edited task back to the Tasks collection
-            Tasks.Add(editedTask);
+                // Add the edited task to the Task collection
+                Tasks.Add(selectedTask);
 
-            // Clear the taskInput Textbox
-            taskInput.Clear();
+                // Show the necessary buttons
+                TriggerButtonVisibility(true, true, true, false);
+
+                // Clear the taskInput
+                taskInput.Clear();
+
+                // Reset selectedTask to null
+                selectedTask = null;
+            }
         }
 
         private void RemoveTask_Click(object sender, RoutedEventArgs e)

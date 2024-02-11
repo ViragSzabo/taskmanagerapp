@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:TaskManagerApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!-- You can add global resources here if needed -->
     </Application.Resources>
 </Application>
