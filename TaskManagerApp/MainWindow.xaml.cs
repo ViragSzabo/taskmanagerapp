@@ -135,6 +135,7 @@ namespace TaskManagerApp
     {
         public ObservableCollection<Task> Tasks { get; set; }
         private Task selectedTask { get; set; }
+        private int CHARACTERLIMIT = 15;
 
         public MainWindow()
         {
@@ -149,13 +150,21 @@ namespace TaskManagerApp
         private void AddTask_Click(object sender, RoutedEventArgs e)
         {
             string newTaskName = taskInput.Text.Trim();
-            Task newTask = new Task(newTaskName);
 
-            if (!string.IsNullOrEmpty(newTaskName))
-            {
-                Tasks.Add(newTask);
-                taskInput.Clear();
-            }
+            if (!string.IsNullOrEmpty(newTaskName)) { 
+                if (newTaskName.Length <= CHARACTERLIMIT)
+                {
+                    Task newTask = new Task(newTaskName);
+                    Tasks.Add(newTask);
+                    taskInput.Clear();
+                } else
+                  {
+                    MessageBox.Show("Too long task name!");
+                  }
+            } else
+                {
+                    MessageBox.Show("Invalid task name!");
+                }
         }
 
         private void EditTask_Click(object sender, RoutedEventArgs e)
@@ -178,25 +187,36 @@ namespace TaskManagerApp
 
         public void SaveEditedTask_Click(object sender, RoutedEventArgs e)
         {
+            // Get the edited tasks from the task input textbox
+            string editedTaskName = taskInput.Text.Trim();
+
             if (selectedTask != null)
             {
-                // Get the edited tasks from the task input textbox
-                string editedTaskName = taskInput.Text.Trim();
+                if (editedTaskName.Length <= CHARACTERLIMIT)
+                {
 
-                // Update the selected task
-                selectedTask.Name = editedTaskName;
+                    // Update the selected task
+                    selectedTask.Name = editedTaskName;
 
-                // Add the edited task to the Task collection
-                Tasks.Add(selectedTask);
+                    // Add the edited task to the Task collection
+                    Tasks.Add(selectedTask);
 
-                // Show the necessary buttons
-                TriggerButtonVisibility(true, true, true, false);
+                    // Show the necessary buttons
+                    TriggerButtonVisibility(true, true, true, false);
 
-                // Clear the taskInput
-                taskInput.Clear();
+                    // Clear the taskInput
+                    taskInput.Clear();
 
-                // Reset selectedTask to null
-                selectedTask = null;
+                    // Reset selectedTask to null
+                    selectedTask = null;
+                } else
+                  {
+                    MessageBox.Show("Too long task name!");
+                  }
+            }
+            else
+            {
+                MessageBox.Show("Invalid task name!");
             }
         }
 
