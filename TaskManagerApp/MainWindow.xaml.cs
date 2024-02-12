@@ -63,7 +63,7 @@ namespace TaskManagerApp
 
         public void EditTask(int index, Task editedTask)
         {
-            if(index >= 0 && index < Tasks.Count)
+            if (index >= 0 && index < Tasks.Count)
             {
                 Tasks[index] = editedTask;
             }
@@ -146,25 +146,28 @@ namespace TaskManagerApp
             // Set initial button visibility
             TriggerButtonVisibility(true, true, true, false);
         }
-        
+
         private void AddTask_Click(object sender, RoutedEventArgs e)
         {
             string newTaskName = taskInput.Text.Trim();
 
-            if (!string.IsNullOrEmpty(newTaskName)) { 
+            if (!string.IsNullOrEmpty(newTaskName))
+            {
                 if (newTaskName.Length <= CHARACTERLIMIT)
                 {
                     Task newTask = new Task(newTaskName);
                     Tasks.Add(newTask);
                     taskInput.Clear();
-                } else
-                  {
-                    MessageBox.Show("Too long task name!");
-                  }
-            } else
-                {
-                    MessageBox.Show("Invalid task name!");
                 }
+                else
+                {
+                    MessageBox.Show("Too long task name!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Invalid task name!");
+            }
         }
 
         private void EditTask_Click(object sender, RoutedEventArgs e)
@@ -209,10 +212,11 @@ namespace TaskManagerApp
 
                     // Reset selectedTask to null
                     selectedTask = null;
-                } else
-                  {
+                }
+                else
+                {
                     MessageBox.Show("Too long task name!");
-                  }
+                }
             }
             else
             {
@@ -236,6 +240,25 @@ namespace TaskManagerApp
             editButton.Visibility = edit ? Visibility.Visible : Visibility.Collapsed;
             removeButton.Visibility = remove ? Visibility.Visible : Visibility.Collapsed;
             saveButton.Visibility = save ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public static class EnumHelper
+        {
+            public static IEnumerable<Priority> PriorityValues
+            {
+                get
+                {
+                    return Enum.GetValues(typeof(Priority)).Cast<Priority>();
+                }
+            }
+
+            public static IEnumerable<Status> StatusValues
+            {
+                get
+                {
+                    return Enum.GetValues(typeof(Status)).Cast<Status>();
+                }
+            }
         }
     }
 }

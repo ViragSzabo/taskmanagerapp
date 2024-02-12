@@ -18,3 +18,5 @@ C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\T
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\obj\Debug\net7.0-windows\TaskManagerApp.pdb
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\obj\Debug\net7.0-windows\TaskManagerApp.genruntimeconfig.cache
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\obj\Debug\net7.0-windows\ref\TaskManagerApp.dll
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\obj\Debug\net7.0-windows\TaskManagerApp_MarkupCompile.lref
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\obj\Debug\net7.0-windows\GeneratedInternalTypeHelper.g.cs
