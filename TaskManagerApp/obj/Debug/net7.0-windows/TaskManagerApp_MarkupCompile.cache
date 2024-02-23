@@ -1,5 +1,5 @@
 ﻿TaskManagerApp
-1.0.0.0
+
 
 winexe
 C#
@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\App.xaml
 11407045341
 
-5-1693500484
+3-1233169557
 1981827736222
 MainWindow.xaml;
 
-True
+False
 

@@ -37,12 +37,17 @@ namespace TaskManagerApp
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
-        public Task(string givenName)
+        public Task(string name) : this(name, DateTime.Now, Priority.Medium, Status.NotStarted)
         {
-            this.Name = givenName;
-            this.DueDate = DateTime.Now;
-            this.Priority = Priority.Medium;
-            this.Status = Status.NotStarted;
+
+        }
+
+        public Task(string name, DateTime? dueDate, Priority priority, Status status)
+        {
+            this.Name = name;
+            this.DueDate = dueDate;
+            this.Priority = priority;
+            this.Status = status;
 
         }
     }
@@ -151,18 +156,11 @@ namespace TaskManagerApp
         {
             string newTaskName = taskInput.Text.Trim();
 
-            if (!string.IsNullOrEmpty(newTaskName))
+            if (!string.IsNullOrEmpty(newTaskName) && newTaskName.Length <= CHARACTERLIMIT)
             {
-                if (newTaskName.Length <= CHARACTERLIMIT)
-                {
-                    Task newTask = new Task(newTaskName);
-                    Tasks.Add(newTask);
-                    taskInput.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("Too long task name!");
-                }
+                Task newTask = new Task(newTaskName);
+                Tasks.Add(newTask);
+                taskInput.Clear();
             }
             else
             {
@@ -193,30 +191,25 @@ namespace TaskManagerApp
             // Get the edited tasks from the task input textbox
             string editedTaskName = taskInput.Text.Trim();
 
-            if (selectedTask != null)
+            if (selectedTask != null && editedTaskName.Length <= CHARACTERLIMIT)
             {
-                if (editedTaskName.Length <= CHARACTERLIMIT)
+                // Update the selected task
+                selectedTask.Name = editedTaskName;
+
+                // Add the edited task to the Task collection
+                if(!Tasks.Contains(selectedTask))
                 {
-
-                    // Update the selected task
-                    selectedTask.Name = editedTaskName;
-
-                    // Add the edited task to the Task collection
                     Tasks.Add(selectedTask);
-
-                    // Show the necessary buttons
-                    TriggerButtonVisibility(true, true, true, false);
-
-                    // Clear the taskInput
-                    taskInput.Clear();
-
-                    // Reset selectedTask to null
-                    selectedTask = null;
                 }
-                else
-                {
-                    MessageBox.Show("Too long task name!");
-                }
+
+                // Show the necessary buttons
+                TriggerButtonVisibility(true, true, true, false);
+
+                // Clear the taskInput
+                taskInput.Clear();
+
+                // Reset selectedTask to null
+                selectedTask = null;
             }
             else
             {
@@ -244,20 +237,14 @@ namespace TaskManagerApp
 
         public static class EnumHelper
         {
-            public static IEnumerable<Priority> PriorityValues
+            public static IEnumerable<Priority> GetPriorityValues()
             {
-                get
-                {
-                    return Enum.GetValues(typeof(Priority)).Cast<Priority>();
-                }
+                return Enum.GetValues(typeof(Priority)).Cast<Priority>();
             }
 
-            public static IEnumerable<Status> StatusValues
+            public static IEnumerable<Status> GetStatusValues()
             {
-                get
-                {
-                    return Enum.GetValues(typeof(Status)).Cast<Status>();
-                }
+                return Enum.GetValues(typeof(Status)).Cast<Status>();
             }
         }
     }
