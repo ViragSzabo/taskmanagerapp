@@ -1,11 +1,15 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -16,6 +20,7 @@ using System.Windows.Shapes;
 
 namespace TaskManagerApp
 {
+    // priority of a task
     public enum Priority
     {
         High,
@@ -23,6 +28,7 @@ namespace TaskManagerApp
         Low
     }
 
+    // status os a task
     public enum Status
     {
         Completed,
@@ -30,201 +36,194 @@ namespace TaskManagerApp
         NotStarted
     }
 
+    // present of a task
     public class Task
     {
+        // attributes of a task
         public string Name { get; set; }
         public DateTime? DueDate { get; set; }
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
-        public Task(string name) : this(name, DateTime.Now, Priority.Medium, Status.NotStarted)
-        {
-
-        }
-
-        public Task(string name, DateTime? dueDate, Priority priority, Status status)
+        // constructor of a task
+        public Task(string name)
         {
             this.Name = name;
-            this.DueDate = dueDate;
-            this.Priority = priority;
-            this.Status = status;
-
+            this.DueDate = DateTime.Now;
+            this.Priority = Priority.Medium;
+            this.Status = Status.NotStarted;
         }
     }
 
+    // present a task list of the app
     public class TaskList
     {
+        // collect a list of the tasks that are currently available
+        // encapsulation: to give a good practice for data integrity and modularity
+        // ObservableCollection is suitable for updating UI elements automatically when the underlying data changes
         public ObservableCollection<Task> Tasks { get; set; }
+        public Task SelectedTask { get; set; }
 
+        // constructor of a tasklist
         public TaskList()
         {
             Tasks = new ObservableCollection<Task>();
         }
 
-        public void AddTask(Task task)
+        // add a new task
+        public void AddTaskToList(Task newTask)
         {
-            Tasks.Add(task);
+            Tasks.Add(newTask);
         }
 
-        public void EditTask(int index, Task editedTask)
+        // edit a task
+        public void EditTask(string name, DateTime? date, Priority priority, Status status)
         {
-            if (index >= 0 && index < Tasks.Count)
-            {
-                Tasks[index] = editedTask;
-            }
+            // update the attributes of the given task
+            this.SelectedTask.Name = name;
+            this.SelectedTask.DueDate = date;
+            this.SelectedTask.Priority = priority;
+            this.SelectedTask.Status = status;
         }
 
-        public void RemoveTask(int index)
+        // remove a task
+        public void RemoveTask(Task task)
         {
-            if (index >= 0 && index < Tasks.Count)
-            {
-                Tasks.RemoveAt(index);
-            }
+            Tasks.Remove(task);
         }
 
+        // sort tasks by the name
         public void SortTasksByName()
         {
             Tasks = new ObservableCollection<Task>(Tasks.OrderBy(task => task.Name));
         }
 
+        // sort tasks by the due date
         public void SortTasksByDueDate()
         {
             Tasks = new ObservableCollection<Task>(Tasks.OrderBy(task => task.DueDate));
         }
 
+        // filter tasks by the status
         public void FilterTasksByStatus(Status status)
         {
             Tasks = new ObservableCollection<Task>(Tasks.Where(task => task.Status == status));
         }
+
+        // filter tasks by the priority
+        public void FilterTasksByPriority(Priority priority)
+        {
+            Tasks = new ObservableCollection<Task>(Tasks.Where(task => task.Priority == priority));
+        }
     }
 
+    // preset a task manager
     public class TaskManager
     {
-        public List<TaskList> TaskLists { get; private set; }
-        public TaskList CurrentTaskList { get; set; }
+        // attributes of the taskmanager: collect tasklists of the app
+        // ObservableCollection is suitable for updating UI elements automatically when the underlying data changes
+        public ObservableCollection<TaskList> TaskLists { get; set; }
 
         public TaskManager()
         {
-            TaskLists = new List<TaskList>();
-            CurrentTaskList = new TaskList();
+            TaskLists = new ObservableCollection<TaskList>();
         }
 
-        public void CreateTaskList()
+        public void AddTaskList(TaskList taskList)
         {
-            TaskList newList = new TaskList();
-            TaskLists.Add(newList);
+            TaskLists.Add(taskList);
         }
 
         public void RemoveTaskList(TaskList taskList)
         {
             TaskLists.Remove(taskList);
         }
-
-        public void SortTasksByName()
-        {
-            CurrentTaskList.SortTasksByName();
-        }
-
-        public void SortTasksByDueDate()
-        {
-            CurrentTaskList.SortTasksByDueDate();
-        }
-
-        public void FilterTasksByStatus(Status status)
-        {
-            CurrentTaskList.FilterTasksByStatus(status);
-        }
     }
 
     public partial class MainWindow : Window
     {
-        public ObservableCollection<Task> Tasks { get; set; }
-        private Task selectedTask { get; set; }
         private int CHARACTERLIMIT = 15;
+        private TaskManager taskManager;
+        private TaskList defaultTaskList;
+        private Task defaultTask;
 
         public MainWindow()
         {
             InitializeComponent();
-            Tasks = new ObservableCollection<Task>();
-            taskListBox.ItemsSource = Tasks;
+            DataContext = this;
 
-            // Set initial button visibility
-            TriggerButtonVisibility(true, true, true, false);
+            taskManager = new TaskManager();
+            defaultTaskList = new TaskList();
+            defaultTask = new Task("test");
+
+            TriggerButtonVisibility(true, true, false, true); // set initial button visibility
+            //SetUpSortingAndFiltering(); // set up sorting and filtering
         }
 
         private void AddTask_Click(object sender, RoutedEventArgs e)
         {
-            string newTaskName = taskInput.Text.Trim();
+            TriggerButtonVisibility(false, true, true, true); // Show the necessary buttons
+            string newName = taskInput.Text.Trim();
 
-            if (!string.IsNullOrEmpty(newTaskName) && newTaskName.Length <= CHARACTERLIMIT)
+            if(!string.IsNullOrEmpty(newName) && newName.Length <= CHARACTERLIMIT)
             {
-                Task newTask = new Task(newTaskName);
-                Tasks.Add(newTask);
-                taskInput.Clear();
+                Task newTask = new Task(newName);
+                defaultTaskList.AddTaskToList(newTask);
+                taskListBox.ItemsSource = defaultTaskList.Tasks;
             }
             else
             {
                 MessageBox.Show("Invalid task name!");
             }
+            taskInput.Clear();
         }
 
         private void EditTask_Click(object sender, RoutedEventArgs e)
         {
-            // Show the necessary buttons
-            TriggerButtonVisibility(false, false, true, true);
+            TriggerButtonVisibility(false, false, true, true); // Show the necessary buttons
 
-            if (taskListBox.SelectedIndex != -1)
+            if(taskListBox.SelectedIndex != -1)
             {
                 // Retrieve the selected task
-                selectedTask = Tasks[taskListBox.SelectedIndex];
-
-                //Show the selected task in the taskInput Textbox for editing
-                taskInput.Text = selectedTask.Name;
-
-                // Remove the selected task from the Tasks collection
-                Tasks.RemoveAt(taskListBox.SelectedIndex);
+                defaultTaskList.SelectedTask = defaultTaskList.Tasks[taskListBox.SelectedIndex];
+                taskInput.Text = defaultTaskList.SelectedTask.Name;
             }
+            taskListBox.ItemsSource = defaultTaskList.Tasks;
+            defaultTaskList.Tasks.RemoveAt(taskListBox.SelectedIndex);
         }
 
-        public void SaveEditedTask_Click(object sender, RoutedEventArgs e)
+        private void SaveEditedTask_Click(object sender, RoutedEventArgs e)
         {
-            // Get the edited tasks from the task input textbox
-            string editedTaskName = taskInput.Text.Trim();
+            TriggerButtonVisibility(true, true, false, true); // Show the necessary buttons
+            string edited = taskInput.Text.Trim();
 
-            if (selectedTask != null && editedTaskName.Length <= CHARACTERLIMIT)
+            if (defaultTaskList.SelectedTask != null && edited.Length <= CHARACTERLIMIT)
             {
-                // Update the selected task
-                selectedTask.Name = editedTaskName;
-
-                // Add the edited task to the Task collection
-                if(!Tasks.Contains(selectedTask))
-                {
-                    Tasks.Add(selectedTask);
-                }
-
-                // Show the necessary buttons
-                TriggerButtonVisibility(true, true, true, false);
-
-                // Clear the taskInput
-                taskInput.Clear();
-
-                // Reset selectedTask to null
-                selectedTask = null;
+                defaultTaskList.SelectedTask.Name = edited; // Update the name of the selected task
+                //defaultTaskList.SelectedTask.DueDate = changeDueDate.SelectedDate;
+                //Priority selectedPriority = ((ComboBoxItem)changePriority.SelectedItem).Content;
+                //defaultTaskList.SelectedTask.Priority = selectedPriority;
+                //Status selectedStatus = ((ComboBoxItem)changeStatus.SelectedItem).Content;
+                //defaultTaskList.SelectedTask.Status = selectedStatus;
             }
             else
             {
                 MessageBox.Show("Invalid task name!");
             }
+
+            if (!defaultTaskList.Tasks.Contains(defaultTaskList.SelectedTask))
+            {
+                defaultTaskList.Tasks.Add(defaultTaskList.SelectedTask);
+                taskListBox.ItemsSource = defaultTaskList.Tasks;
+            }
+            taskInput.Clear();
         }
 
         private void RemoveTask_Click(object sender, RoutedEventArgs e)
         {
-
-            if (taskListBox.SelectedIndex >= 0)
-            {
-                Tasks.RemoveAt(taskListBox.SelectedIndex);
-                taskInput.Clear();
-            }
+            TriggerButtonVisibility(true, true, true, false); // Show the necessary buttons
+            defaultTaskList.RemoveTask(defaultTaskList.SelectedTask);
+            taskListBox.ItemsSource = defaultTaskList.Tasks;
         }
 
         private void TriggerButtonVisibility(bool add, bool edit, bool remove, bool save)
@@ -235,17 +234,24 @@ namespace TaskManagerApp
             saveButton.Visibility = save ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public static class EnumHelper
+        private void SortByDueDate_Click(object sender, RoutedEventArgs e)
         {
-            public static IEnumerable<Priority> GetPriorityValues()
-            {
-                return Enum.GetValues(typeof(Priority)).Cast<Priority>();
-            }
 
-            public static IEnumerable<Status> GetStatusValues()
-            {
-                return Enum.GetValues(typeof(Status)).Cast<Status>();
-            }
+        }
+
+        private void ClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Priority_Select(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Status_Select(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
