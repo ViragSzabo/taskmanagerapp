@@ -16,8 +16,6 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
             <TextBox x:Name="taskInput" Width="300" Margin="0,0,10,0" />
             <Button x:Name="addButton" Content="Add" Click="AddTask_Click" Width="48" BorderBrush="{x:Null}" Background="#FF166B68" Foreground="White"/>
-            <Button x:Name="editButton" Content="Edit" Click="EditTask_Click" Width="48" Background="#FF166B68" BorderBrush="{x:Null}" Foreground="White"/>
-            <Button x:Name="saveButton" Content="Save" Click="SaveEditedTask_Click" Width="48" Foreground="White" BorderBrush="{x:Null}" Background="#FF166B68"/>
             <Button x:Name="removeButton" Content="Remove" Click="RemoveTask_Click" Width="50" Foreground="White" Background="#FF166B68" BorderBrush="{x:Null}"/>
         </StackPanel>
 
@@ -55,7 +53,7 @@
                 <DataTemplate>
                     <!-- Data Rows -->
                     <StackPanel Orientation="Horizontal" Margin="10">
-                        <TextBlock Text="{Binding Name}" Margin="5,0,40,0"/>
+                        <TextBox Width="50" Text="{Binding Name}" Margin="20,0,20,0"/>
 
                         <!-- Due Date DatePicker -->
                         <DatePicker x:Name="dueDatePick" Width="105" SelectedDate="{Binding DueDate}" Margin="10,0,5,0"/>
