@@ -1,21 +1,330 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 namespace TaskManagerApp
 {
+    public partial class MainWindow : Window
+    {
+        private readonly int characterLimit = 15;
+        private TaskManager taskManager;
+        private TaskListViewModel defaultTaskListViewModel;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            InitializeTaskManager();
+            SetUpDefaultTask();
+            SetInitialButtonVisibility();
+        }
+
+        private void SetInitialButtonVisibility()
+        {
+            addButton.Visibility = Visibility.Visible;
+            removeButton.Visibility = Visibility.Visible;
+        }
+
+        private void SetUpDefaultTask()
+        {
+            defaultTaskListViewModel = new TaskListViewModel(new TaskList());
+            taskListBox.ItemsSource = defaultTaskListViewModel.Tasks;
+            defaultTaskListViewModel.AddTask(new Task("default"));
+        }
+
+        private void InitializeTaskManager()
+        {
+            taskManager = new TaskManager();
+        }
+
+        private void AddTask_Click(object sender, RoutedEventArgs e)
+        {
+            string newName = taskInput.Text.Trim();
+
+            if (!string.IsNullOrEmpty(newName) && newName.Length <= characterLimit)
+            {
+                defaultTaskListViewModel.AddTask(new Task(newName));
+                MessageBox.Show("Task added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Invalid task name! Please enter a name up to 15 characters long.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            taskInput.Clear();
+        }
+
+        private void RemoveTask_Click(object sender, RoutedEventArgs e)
+        {
+            if (taskListBox.SelectedItem != null)
+            {
+                defaultTaskListViewModel.RemoveSelectedTask();
+                SetInitialButtonVisibility();
+                MessageBox.Show("Task removed successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Please select a task to remove.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void ClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+            defaultTaskListViewModel.ClearFilters();
+        }
+
+        private void Status_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = (ComboBox)sender;
+            if (box.SelectedItem != null)
+            {
+                string selectedStatus = ((ComboBoxItem)box.SelectedItem).Content.ToString();
+                defaultTaskListViewModel.FilterTasksByStatus(selectedStatus);
+            }
+        }
+
+        private void Priority_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox box = (ComboBox)sender;
+            if (box.SelectedItem != null)
+            {
+                string selectedPriority = ((ComboBoxItem)box.SelectedItem).Content.ToString();
+                defaultTaskListViewModel.FilterTasksByPriority(selectedPriority);
+            }
+        }
+    }
+
+    public class TaskListViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private TaskList taskList;
+        private TaskViewModel selectedTask;
+
+        public ObservableCollection<TaskViewModel> Tasks { get; set; }
+
+        public TaskViewModel SelectedTask
+        {
+            get => selectedTask;
+            set
+            {
+                selectedTask = value;
+                OnPropertyChanged(nameof(SelectedTask));
+            }
+        }
+
+        public TaskListViewModel(TaskList taskList)
+        {
+            this.taskList = taskList;
+            Tasks = new ObservableCollection<TaskViewModel>();
+            foreach (var task in taskList.Tasks)
+            {
+                Tasks.Add(new TaskViewModel(task));
+            }
+        }
+
+        public void AddTask(Task task)
+        {
+            taskList.AddTask(task);
+            Tasks.Insert(0, new TaskViewModel(task));
+        }
+
+        public void EditTask(string name, DateTime? date, Priority priority, Status status)
+        {
+            if (SelectedTask != null)
+            {
+                //SelectedTask.SaveChanges(name, date, priority, status);
+                SelectedTask.Name = name;
+                SelectedTask.DueDate = date;
+                SelectedTask.Priority = priority;
+                SelectedTask.Status = status;
+            }
+        }
+
+        public void RemoveSelectedTask()
+        {
+            if (SelectedTask != null)
+            {
+                taskList.RemoveTask(SelectedTask.Task);
+                Tasks.Remove(SelectedTask);
+            }
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // Add this method to refresh the task list
+        private void RefreshTasks()
+        {
+            // FilteredTasks is a placeholder for your filtered tasks collection
+            ObservableCollection<TaskViewModel> filteredTasks = new ObservableCollection<TaskViewModel>();
+
+            foreach (var task in Tasks)
+            {
+                if (task.IsVisible)
+                {
+                    filteredTasks.Add(task);
+                }
+            }
+
+            Tasks = filteredTasks;
+            OnPropertyChanged(nameof(Tasks));
+        }
+
+        public void ClearFilters()
+        {
+            foreach (var task in Tasks)
+            {
+                task.IsVisible = true;
+            }
+        }
+
+        public void FilterTasksByStatus(string status)
+        {
+            foreach (var task in Tasks)
+            {
+                if (task.Status == Status.Completed)
+                {
+                    task.IsVisible = task.Status == Status.Completed;
+                }
+                else if (task.Status == Status.InProgress)
+                {
+                    task.IsVisible = task.Status == Status.InProgress;
+                }
+                else
+                {
+                    task.IsVisible = task.Status == Status.NotStarted;
+                }
+            }
+            RefreshTasks();
+        }
+
+        public void FilterTasksByPriority(string priority)
+        {
+            foreach (var task in Tasks)
+            {
+                if (task.Priority == Priority.High)
+                {
+                    task.IsVisible = task.Priority == Priority.High;
+                }
+                else if (task.Priority == Priority.Medium)
+                {
+                    task.IsVisible = task.Priority == Priority.Medium;
+                }
+                else
+                {
+                    task.IsVisible = task.Priority == Priority.Low;
+                }
+            }
+            RefreshTasks();
+        }
+
+        public void FilterByDate(DateTime date)
+        {
+            foreach (var task in Tasks)
+            {
+                if (task.DueDate == date)
+                {
+                    task.IsVisible = task.DueDate == date;
+                }
+            }
+            RefreshTasks();
+        }
+    }
+
+    public class TaskViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private Task task;
+        private TaskList TaskList;
+
+        public Task Task
+        {
+            get => task;
+            set
+            {
+                task = value;
+                OnPropertyChanged(nameof(Task));
+            }
+        }
+
+        public DateTime? DueDate
+        {
+            get => Task.DueDate;
+            set
+            {
+                Task.DueDate = value;
+                OnPropertyChanged(nameof(DueDate));
+            }
+        }
+
+        public Priority Priority
+        {
+            get => Task.Priority;
+            set
+            {
+                Task.Priority = value;
+                OnPropertyChanged(nameof(Priority));
+            }
+        }
+
+        public Status Status
+        {
+            get => Task.Status;
+            set
+            {
+                Task.Status = value;
+                OnPropertyChanged(nameof(Status));
+            }
+        }
+
+        public string Name
+        {
+            get => Task.Name;
+            set
+            {
+                Task.Name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        public void EditTask(string name, DateTime? date, Priority priority, Status status)
+        {
+            if (task != null)
+            {
+                task.Name = name;
+                task.DueDate = date;
+                task.Priority = priority;
+                task.Status = status;
+
+                // Update the task in the TaskList
+                TaskList.UpdateTask(task);
+            }
+        }
+
+        public bool IsVisible { get; set; } = true;
+
+        public TaskViewModel(Task task)
+        {
+            this.task = task;
+        }
+
+        public void SaveChanges(string name, DateTime? date, Priority priority, Status status)
+        {
+            Name = name;
+            DueDate = date;
+            Priority = priority;
+            Status = status;
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
     public enum Priority
     {
         High,
@@ -30,35 +339,13 @@ namespace TaskManagerApp
         NotStarted
     }
 
-    public class Task
-    {
-        public string Name { get; set; }
-        public DateTime? DueDate { get; set; }
-        public Priority Priority { get; set; }
-        public Status Status { get; set; }
-
-        public Task(string name) : this(name, DateTime.Now, Priority.Medium, Status.NotStarted)
-        {
-
-        }
-
-        public Task(string name, DateTime? dueDate, Priority priority, Status status)
-        {
-            this.Name = name;
-            this.DueDate = dueDate;
-            this.Priority = priority;
-            this.Status = status;
-
-        }
-    }
-
     public class TaskList
     {
-        public ObservableCollection<Task> Tasks { get; set; }
+        public List<Task> Tasks { get; set; }
 
         public TaskList()
         {
-            Tasks = new ObservableCollection<Task>();
+            Tasks = new List<Task>();
         }
 
         public void AddTask(Task task)
@@ -66,186 +353,46 @@ namespace TaskManagerApp
             Tasks.Add(task);
         }
 
-        public void EditTask(int index, Task editedTask)
+        public void RemoveTask(Task task)
         {
-            if (index >= 0 && index < Tasks.Count)
+            Tasks.Remove(task);
+        }
+        public void UpdateTask(Task task)
+        {
+            // Find the task in the list and update it
+            Task existingTask = Tasks.Find(t => t.Name == task.Name);
+            if (existingTask != null)
             {
-                Tasks[index] = editedTask;
+                existingTask.DueDate = task.DueDate;
+                existingTask.Priority = task.Priority;
+                existingTask.Status = task.Status;
             }
         }
+    }
 
-        public void RemoveTask(int index)
-        {
-            if (index >= 0 && index < Tasks.Count)
-            {
-                Tasks.RemoveAt(index);
-            }
-        }
+    public class Task
+    {
+        public string Name { get; set; }
+        public DateTime? DueDate { get; set; }
+        public Priority Priority { get; set; }
+        public Status Status { get; set; }
 
-        public void SortTasksByName()
+        public Task(string name)
         {
-            Tasks = new ObservableCollection<Task>(Tasks.OrderBy(task => task.Name));
-        }
-
-        public void SortTasksByDueDate()
-        {
-            Tasks = new ObservableCollection<Task>(Tasks.OrderBy(task => task.DueDate));
-        }
-
-        public void FilterTasksByStatus(Status status)
-        {
-            Tasks = new ObservableCollection<Task>(Tasks.Where(task => task.Status == status));
+            Name = name;
+            DueDate = DateTime.Today;
+            Priority = Priority.Medium;
+            Status = Status.NotStarted;
         }
     }
 
     public class TaskManager
     {
-        public List<TaskList> TaskLists { get; private set; }
-        public TaskList CurrentTaskList { get; set; }
+        public TaskList TaskList { get; set; }
 
         public TaskManager()
         {
-            TaskLists = new List<TaskList>();
-            CurrentTaskList = new TaskList();
-        }
-
-        public void CreateTaskList()
-        {
-            TaskList newList = new TaskList();
-            TaskLists.Add(newList);
-        }
-
-        public void RemoveTaskList(TaskList taskList)
-        {
-            TaskLists.Remove(taskList);
-        }
-
-        public void SortTasksByName()
-        {
-            CurrentTaskList.SortTasksByName();
-        }
-
-        public void SortTasksByDueDate()
-        {
-            CurrentTaskList.SortTasksByDueDate();
-        }
-
-        public void FilterTasksByStatus(Status status)
-        {
-            CurrentTaskList.FilterTasksByStatus(status);
-        }
-    }
-
-    public partial class MainWindow : Window
-    {
-        public ObservableCollection<Task> Tasks { get; set; }
-        private Task selectedTask { get; set; }
-        private int CHARACTERLIMIT = 15;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            Tasks = new ObservableCollection<Task>();
-            taskListBox.ItemsSource = Tasks;
-
-            // Set initial button visibility
-            TriggerButtonVisibility(true, true, true, false);
-        }
-
-        private void AddTask_Click(object sender, RoutedEventArgs e)
-        {
-            string newTaskName = taskInput.Text.Trim();
-
-            if (!string.IsNullOrEmpty(newTaskName) && newTaskName.Length <= CHARACTERLIMIT)
-            {
-                Task newTask = new Task(newTaskName);
-                Tasks.Add(newTask);
-                taskInput.Clear();
-            }
-            else
-            {
-                MessageBox.Show("Invalid task name!");
-            }
-        }
-
-        private void EditTask_Click(object sender, RoutedEventArgs e)
-        {
-            // Show the necessary buttons
-            TriggerButtonVisibility(false, false, true, true);
-
-            if (taskListBox.SelectedIndex != -1)
-            {
-                // Retrieve the selected task
-                selectedTask = Tasks[taskListBox.SelectedIndex];
-
-                //Show the selected task in the taskInput Textbox for editing
-                taskInput.Text = selectedTask.Name;
-
-                // Remove the selected task from the Tasks collection
-                Tasks.RemoveAt(taskListBox.SelectedIndex);
-            }
-        }
-
-        public void SaveEditedTask_Click(object sender, RoutedEventArgs e)
-        {
-            // Get the edited tasks from the task input textbox
-            string editedTaskName = taskInput.Text.Trim();
-
-            if (selectedTask != null && editedTaskName.Length <= CHARACTERLIMIT)
-            {
-                // Update the selected task
-                selectedTask.Name = editedTaskName;
-
-                // Add the edited task to the Task collection
-                if(!Tasks.Contains(selectedTask))
-                {
-                    Tasks.Add(selectedTask);
-                }
-
-                // Show the necessary buttons
-                TriggerButtonVisibility(true, true, true, false);
-
-                // Clear the taskInput
-                taskInput.Clear();
-
-                // Reset selectedTask to null
-                selectedTask = null;
-            }
-            else
-            {
-                MessageBox.Show("Invalid task name!");
-            }
-        }
-
-        private void RemoveTask_Click(object sender, RoutedEventArgs e)
-        {
-
-            if (taskListBox.SelectedIndex >= 0)
-            {
-                Tasks.RemoveAt(taskListBox.SelectedIndex);
-                taskInput.Clear();
-            }
-        }
-
-        private void TriggerButtonVisibility(bool add, bool edit, bool remove, bool save)
-        {
-            addButton.Visibility = add ? Visibility.Visible : Visibility.Collapsed;
-            editButton.Visibility = edit ? Visibility.Visible : Visibility.Collapsed;
-            removeButton.Visibility = remove ? Visibility.Visible : Visibility.Collapsed;
-            saveButton.Visibility = save ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        public static class EnumHelper
-        {
-            public static IEnumerable<Priority> GetPriorityValues()
-            {
-                return Enum.GetValues(typeof(Priority)).Cast<Priority>();
-            }
-
-            public static IEnumerable<Status> GetStatusValues()
-            {
-                return Enum.GetValues(typeof(Status)).Cast<Status>();
-            }
+            this.TaskList = new TaskList();
         }
     }
 }
