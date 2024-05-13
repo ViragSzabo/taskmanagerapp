@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
+
 namespace TaskManagerApp
 {
     public partial class MainWindow : Window
@@ -15,7 +20,6 @@ namespace TaskManagerApp
         public MainWindow()
         {
             InitializeComponent();
-            InitializeTaskManager();
             SetUpDefaultTask();
             SetInitialButtonVisibility();
         }
@@ -28,14 +32,26 @@ namespace TaskManagerApp
 
         private void SetUpDefaultTask()
         {
-            defaultTaskListViewModel = new TaskListViewModel(new TaskList());
+            taskManager = new TaskManager();
+            defaultTaskListViewModel = new TaskListViewModel(taskManager.TaskList);
+            defaultTaskListViewModel.AddTask(new TaskItem("default"));
             taskListBox.ItemsSource = defaultTaskListViewModel.Tasks;
-            defaultTaskListViewModel.AddTask(new Task("default"));
         }
 
-        private void InitializeTaskManager()
+        private void HighlightButton(Button button)
         {
-            taskManager = new TaskManager();
+            // Change the background color temporarily
+            button.Background = Brushes.LightGreen;
+
+            // Reset the background color after a short delay
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.5); // Adjust the duration as needed
+            timer.Tick += (sender, e) =>
+            {
+                button.Background = Brushes.Transparent;
+                timer.Stop();
+            };
+            timer.Start();
         }
 
         private void AddTask_Click(object sender, RoutedEventArgs e)
@@ -44,7 +60,7 @@ namespace TaskManagerApp
 
             if (!string.IsNullOrEmpty(newName) && newName.Length <= characterLimit)
             {
-                defaultTaskListViewModel.AddTask(new Task(newName));
+                defaultTaskListViewModel.AddTask(new TaskItem(newName));
                 MessageBox.Show("Task added successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -52,6 +68,7 @@ namespace TaskManagerApp
                 MessageBox.Show("Invalid task name! Please enter a name up to 15 characters long.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             taskInput.Clear();
+            HighlightButton(addButton);
         }
 
         private void RemoveTask_Click(object sender, RoutedEventArgs e)
@@ -66,6 +83,7 @@ namespace TaskManagerApp
             {
                 MessageBox.Show("Please select a task to remove.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+            HighlightButton(removeButton);
         }
 
         private void ClearFilter_Click(object sender, RoutedEventArgs e)
@@ -76,20 +94,27 @@ namespace TaskManagerApp
         private void Status_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = (ComboBox)sender;
-            if (box.SelectedItem != null)
+            if (box.SelectedItem != null && defaultTaskListViewModel != null)
             {
                 string selectedStatus = ((ComboBoxItem)box.SelectedItem).Content.ToString();
                 defaultTaskListViewModel.FilterTasksByStatus(selectedStatus);
+            } else
+            {
+                MessageBox.Show("Please, run it again!", "Error", MessageBoxButton.OK, MessageBoxImage.None);
             }
         }
 
         private void Priority_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = (ComboBox)sender;
-            if (box.SelectedItem != null)
+            if (defaultTaskListViewModel != null && box.SelectedItem != null)
             {
                 string selectedPriority = ((ComboBoxItem)box.SelectedItem).Content.ToString();
                 defaultTaskListViewModel.FilterTasksByPriority(selectedPriority);
+            }
+            else
+            {
+                MessageBox.Show("Please, run it again!", "Error", MessageBoxButton.OK, MessageBoxImage.None);
             }
         }
     }
@@ -116,23 +141,23 @@ namespace TaskManagerApp
         {
             this.taskList = taskList;
             Tasks = new ObservableCollection<TaskViewModel>();
-            foreach (var task in taskList.Tasks)
+
+            foreach (var task in taskList.Tasks) // Iterate over taskList.Tasks instead of Tasks
             {
-                Tasks.Add(new TaskViewModel(task));
+                Tasks.Add(new TaskViewModel(task, this));
             }
         }
 
-        public void AddTask(Task task)
+        public void AddTask(TaskItem task)
         {
             taskList.AddTask(task);
-            Tasks.Insert(0, new TaskViewModel(task));
+            Tasks.Insert(0, new TaskViewModel(task, this));
         }
 
         public void EditTask(string name, DateTime? date, Priority priority, Status status)
         {
             if (SelectedTask != null)
             {
-                //SelectedTask.SaveChanges(name, date, priority, status);
                 SelectedTask.Name = name;
                 SelectedTask.DueDate = date;
                 SelectedTask.Priority = priority;
@@ -144,32 +169,13 @@ namespace TaskManagerApp
         {
             if (SelectedTask != null)
             {
-                taskList.RemoveTask(SelectedTask.Task);
-                Tasks.Remove(SelectedTask);
+                SelectedTask.RemoveTask(SelectedTask.Task);
             }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        // Add this method to refresh the task list
-        private void RefreshTasks()
-        {
-            // FilteredTasks is a placeholder for your filtered tasks collection
-            ObservableCollection<TaskViewModel> filteredTasks = new ObservableCollection<TaskViewModel>();
-
-            foreach (var task in Tasks)
-            {
-                if (task.IsVisible)
-                {
-                    filteredTasks.Add(task);
-                }
-            }
-
-            Tasks = filteredTasks;
-            OnPropertyChanged(nameof(Tasks));
         }
 
         public void ClearFilters()
@@ -197,7 +203,6 @@ namespace TaskManagerApp
                     task.IsVisible = task.Status == Status.NotStarted;
                 }
             }
-            RefreshTasks();
         }
 
         public void FilterTasksByPriority(string priority)
@@ -217,7 +222,6 @@ namespace TaskManagerApp
                     task.IsVisible = task.Priority == Priority.Low;
                 }
             }
-            RefreshTasks();
         }
 
         public void FilterByDate(DateTime date)
@@ -229,18 +233,16 @@ namespace TaskManagerApp
                     task.IsVisible = task.DueDate == date;
                 }
             }
-            RefreshTasks();
         }
     }
 
     public class TaskViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private TaskItem task;
+        private TaskListViewModel taskListViewModel;
 
-        private Task task;
-        private TaskList TaskList;
-
-        public Task Task
+        public TaskItem Task
         {
             get => task;
             set
@@ -290,38 +292,25 @@ namespace TaskManagerApp
             }
         }
 
-        public void EditTask(string name, DateTime? date, Priority priority, Status status)
-        {
-            if (task != null)
-            {
-                task.Name = name;
-                task.DueDate = date;
-                task.Priority = priority;
-                task.Status = status;
-
-                // Update the task in the TaskList
-                TaskList.UpdateTask(task);
-            }
-        }
-
         public bool IsVisible { get; set; } = true;
 
-        public TaskViewModel(Task task)
+        public TaskViewModel(TaskItem task, TaskListViewModel taskListViewModel)
         {
             this.task = task;
-        }
-
-        public void SaveChanges(string name, DateTime? date, Priority priority, Status status)
-        {
-            Name = name;
-            DueDate = date;
-            Priority = priority;
-            Status = status;
+            this.taskListViewModel = taskListViewModel;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void RemoveTask(TaskItem task)
+        {
+            if (task != null && taskListViewModel != null)
+            {
+                taskListViewModel.RemoveSelectedTask();
+            }
         }
     }
 
@@ -341,43 +330,32 @@ namespace TaskManagerApp
 
     public class TaskList
     {
-        public List<Task> Tasks { get; set; }
+        public List<TaskItem> Tasks { get; set; }
 
         public TaskList()
         {
-            Tasks = new List<Task>();
+            Tasks = new List<TaskItem>();
         }
 
-        public void AddTask(Task task)
+        public void AddTask(TaskItem task)
         {
             Tasks.Add(task);
         }
 
-        public void RemoveTask(Task task)
+        public void RemoveTask(TaskItem task)
         {
             Tasks.Remove(task);
         }
-        public void UpdateTask(Task task)
-        {
-            // Find the task in the list and update it
-            Task existingTask = Tasks.Find(t => t.Name == task.Name);
-            if (existingTask != null)
-            {
-                existingTask.DueDate = task.DueDate;
-                existingTask.Priority = task.Priority;
-                existingTask.Status = task.Status;
-            }
-        }
     }
 
-    public class Task
+    public class TaskItem
     {
         public string Name { get; set; }
         public DateTime? DueDate { get; set; }
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
-        public Task(string name)
+        public TaskItem(string name)
         {
             Name = name;
             DueDate = DateTime.Today;
