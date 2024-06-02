@@ -65,7 +65,6 @@ The user interacts with the Task Manager App through various actions.
 | GitHub | 3.11.4 | January 30, 2024 | Version Control for the project. |
 
 ### 4. Test Plan
-MESSAGE TO MYSELF: DO NOT FORGET THAT EDIT NAME and/or DATE and/or PRIORITY and/or STATUS!!!
 Ensure the Task Manager application functions as intended, providing users with efficient task management capabilities.
 
 #### 4.1 Task Creation
@@ -73,30 +72,28 @@ Ensure the Task Manager application functions as intended, providing users with 
 | --- | --- | --- | --- |
 | 4.1.1 | Start | Open the application. |
 | 4.1.2 | New Task | Create a new task with various attributes (name, due date, priority, status). | The application successfully creates a new task. |
-| 4.1.3 | Save | Save the task. | The application stops running. |
+| 4.1.3 | Save | Save the task. | The application shows the new task on the screen. |
 
 #### 4.2 Task Editing
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.2.1 | Start | Open the application. | The application starts running. |
 | 4.2.2 | Edit Task | Edit an existing task, modifying its attributes. | The application successfully edits the task. |
-| 4.2.3 | Save | Save the task. | The application stops running. |
+| 4.2.3 | Save | Save the task. | The application shows the changed value of the task. |
 
 #### 4.3 Task Deletion
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.3.1 | Start | Open the application. | The application starts running. |
 | 4.3.2 | Remove Task | Delete an existing task. | The application successfully removes the selected task. |
-| 4.3.3 | Save | Save the task. | The application stops running. |
 
 #### 4.4 Task List Sorting
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.4.1 | Start | Open the application. | The application starts running. |
-| 4.4.2 | Edit Task | Sort tasks by due date. | The tasks are going to be sorted by the selected due date. |
-| 4.4.3 | Edit Task | Sort tasks by priority. | The tasks are going to be sorted by the selected priority |
-| 4.4.4 | Edit Task | Sort tasks by status. | The tasks are going to be sorted by the selected status. |
-| 4.4.5 | Save | Save the task. | The application stops running. |
+| 4.4.2 | Sort List | Sort tasks by due date. | The tasks are going to be sorted by the selected due date. |
+| 4.4.3 | Sort List | Sort tasks by priority. | The tasks are going to be sorted by the selected priority |
+| 4.4.4 | Sort List | Sort tasks by status. | The tasks are going to be sorted by the selected status. |
 
 #### 4.5 Task Filtering
 | Step | Title | Description | Expected Result |
@@ -105,14 +102,13 @@ Ensure the Task Manager application functions as intended, providing users with 
 | 4.5.2 | Remove Task | Apply filters to display tasks based on due date. | The tasks are going to be filtered by the selected due date. |
 | 4.5.3 | Remove Task | Apply filters to display tasks based on priority. | The tasks are going to be filtered by the selected priority. |
 | 4.5.4 | Remove Task | Apply filters to display tasks based on status. | The tasks are going to be filtered by the selected status. |
-| 4.5.5 | Save | Save the task. | The application stops running. |
 
 #### 4.6 Task List Interaction
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.6.1 | Start | Open the application. | The application starts running. |
 | 4.6.2 | Edit Task | Select a task from the list. | Task details are displayed, and options (edit, delete) are available. |
-| 4.6.3 | Save | Save the task. | The application stops running. |
+| 4.6.3 | Save | Save the task. | The application shows the task on the screen. |
 
 #### 4.7 User Interface Responsiveness
 | Step | Title | Description | Expected Result |
@@ -125,12 +121,17 @@ Ensure the Task Manager application functions as intended, providing users with 
 #### 5.1 Must-Have
 | Title | Description |
 | --- | --- |
-| Create a task list | As a user, I want to be able to create a new task list to organize my tasks effectively. |
 | Add a task | As a user, I want to add a new task to the task list with attributes like name, due date, priority, and status. |
 | Edit a task | As a user, I want to edit an existing task's attributes to keep information up-to-date. |
 | Remove a task | As a user, I want to delete a task from the list when it is no longer relevant. |
 
 #### 5.2 Should-Have
+| Title | Description |
+| --- | --- |
+| Task List Interactions | As a user, I want to interact with the task list, selecting and viewing tasks easily. |
+| User Interface Responsiveness | As a user, I expect the application's user interface to be responsive to different window sizes. |
+
+#### 5.3 Could-Have
 | Title | Description |
 | --- | --- |
 | Sort tasks by due date | As a user, I want to sort tasks based on due date for better organization. |
@@ -139,12 +140,6 @@ Ensure the Task Manager application functions as intended, providing users with 
 | Filter tasks by due date | As a user, I want to apply filters to display tasks based on due date. |
 | Filter tasks by priority | As a user, I want to apply filters to display tasks based on priority. |
 | Filter tasks by status | As a user, I want to apply filters to display tasks based on status. |
-
-#### 5.3 Could-Have
-| Title | Description |
-| --- | --- |
-| Task List Interactions | As a user, I want to interact with the task list, selecting and viewing tasks easily. |
-| User Interface Responsiveness | As a user, I expect the application's user interface to be responsive to different window sizes. |
 
 #### 5.4 Won't-Have
 | Title | Description |
@@ -164,33 +159,34 @@ Ensure the Task Manager application functions as intended, providing users with 
 | February 11 | Dev | Fixing UI and methods. Remain tasks: sort, filter, edit date, priority, status. |
 | February 12 | Dev | Make a fancy UI. Add comments and review the code. |
 | February 13 | Test | Test. |
-| February 14 | End | Write a User Manual for the Windows application.  |
+| May 1 - June 2 | End | Write a User Manual for the Windows application.  |
 
 ### 7. User Manual
 #### 7.1 Overview
-This application is used to increase productivity and it was a great way to practice the C# programming language for something useful.
+*This application increased productivity and was a great way to practice the C# programming language for something useful.*
 
 #### 7.2 Getting Started
 | Step | Title | Description |
 | --- | --- | --- |
-| 1 |   |   |
-| 2 |   |   |
-| 3 |   |   |
+| 1 | Download | Clone the repository. |
+| 2 | Open | Open the project in Visual Studio 2022 or Blend for Visual Studio 2022. |
+| 3 | Start | Run the application. |
+| 4 | Use | Start using the application (add, edit, remove). |
 
 #### 7.3 User Interface
 | Pages | Description |
 | --- | --- |
-| Home |   |
-| Task List |   |
+| Home | See the task manager application. |
+| Task List | See a task list with a default task. |
 
 #### 7.4 Task Management
 | Action | Description |
 | --- | --- |
-| Create |   |
-| Edit |   |
-| Delete |   |
-| Sort |   |
-| Filter |   |
+| Create | Add a new task to the list. |
+| Edit | Edit a task on the list. |
+| Delete | Remove a task you no longer need. |
+| Sort | Sort your tasks as you wish to see them. |
+| Filter | Filter your tasks as you wish to see them. |
 
 ### 8. Additional Information
-Virag Szabo | BS | Information Technology | February 2024
+Virag Szabo | BS | Information Technology | February - June 2024
