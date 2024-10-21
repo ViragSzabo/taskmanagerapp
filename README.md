@@ -51,8 +51,8 @@ The primary objective of this project is to develop a task management applicatio
 #### 2.2 Class Relationships and Design Patterns
 | Name | Description |
 | --- | --- |
-| **TaskManager** and **TaskList** | It follows the Singleton pattern to ensure a single point of control for task management across the application. |
-| **TaskList** and **Task** | Each TaskList contains multiple Task objects, forming a one-to-many relationship. | 
+| **TaskManager** | It follows the Singleton pattern to ensure a single point of control for task management across the application. |
+| **TaskList** | Each TaskList contains multiple Task objects, forming a one-to-many relationship. | 
 | **Task** | It could implement the Observer pattern using events (e.g., INotifyPropertyChanged) to notify the user interface when task properties change. This ensures that updates in task details are reflected across all relevant views in real-time. | 
 | **TaskView** and **ListView** | The Task class is bound to the user interface using data-binding principles. Whenever task attributes such as name, due date, or status are updated, the corresponding UI views are automatically updated to reflect these changes. | 
 | **Status** and **Priority** | Both Priority and Status enums are used throughout the application for filtering, sorting, and intuitively displaying tasks. They also play a role in defining the business logic (e.g., only Progress tasks are displayed by default on the home screen). | 
@@ -84,7 +84,7 @@ It focuses on the high-level architecture of the application, showing the differ
 - Business Logic Components: TaskManager, TaskList, Task
 - Data Components: Storage or Data Handling logic
 
-  ![The Use Case Diagram](Diagrams/component.png)
+![The Use Case Diagram](Diagrams/component.png)
 
 #### 2.7 State Diagram
 Show the process of a task and how its state can change
@@ -95,133 +95,155 @@ Show the process of a task and how its state can change
 | Name | Version | Date | Note |
 | --- | --- | --- | --- |
 | Visual Studio 2022 | 17.8 | January 22, 2024 | The official source of the project. |
-| WPF | 4.5 | February 6, 2023 | Giving a visual presentation of the project. | 
+| WPF | 4.5 | February 6, 2023 | Windows Presentation Foundation (WPF) for creating the UI. | 
 | .NET Framework | 7.0 | November 2022| The ASP.NET Core Runtime enables you to run existing web/server applications. |
 | GitHub | 3.11.4 | January 30, 2024 | Version Control for the project. |
+| Astah UML | 8.4 | February 10, 2024 | Used for creating class diagrams and other UML designs. |
 
 ### 4. Test Plan
 Ensure the Task Manager application functions as intended, providing users with efficient task management capabilities.
 
-#### 4.1 Task Creation
+#### 4.1 Create a list
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
-| 4.1.1 | Start | Open the application. |
-| 4.1.2 | New Task | Create a new task with various attributes (name, due date, priority, status). | The application successfully creates a new task. |
-| 4.1.3 | Save | Save the task. | The application shows the new task on the screen. |
+| 4.1.1 | Start | Open the application. | The application starts running. |
+| 4.1.2 | Create a new list | Create a new list with a name.	 | The home page is updated with the new list. |
 
-#### 4.2 Task Editing
+#### 4.2 Create a task
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
-| 4.2.1 | Start | Open the application. | The application starts running. |
-| 4.2.2 | Edit Task | Edit an existing task, modifying its attributes. | The application successfully edits the task. |
-| 4.2.3 | Save | Save the task. | The application shows the changed value of the task. |
+| 4.1.1 | Start | Open the application. | The application starts running. |
+| 4.1.2 | View a list | Select a task list.	 | The page of the selected list opens. |
+| 4.1.3 | Create a new task | Open an input page of the task. | The task is successfully created. |
+| 4.1.4 | Save | Save the attributes of the task. | The list page is updated with the new task. |
 
-#### 4.3 Task Deletion
+#### 4.3 Edit a task in a list
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.3.1 | Start | Open the application. | The application starts running. |
-| 4.3.2 | Remove Task | Delete an existing task. | The application successfully removes the selected task. |
+| 4.3.2 | View a list | Select a task list.	 | The page of the selected list opens. |
+| 4.3.3 | View a task | Select a task.	| The page of the selected task opens. |
+| 4.3.4 | Edit Task | Modify the task’s attributes (name, due date, priority, etc.).	| Task attributes are successfully updated. |
+| 4.3.5 | Save | Save the edited task. | The list page is updated with the edited task. |
 
-#### 4.4 Task List Sorting
+#### 4.4 Remove a task from a list
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.4.1 | Start | Open the application. | The application starts running. |
-| 4.4.2 | Sort List | Sort tasks by due date. | The tasks are going to be sorted by the selected due date. |
-| 4.4.3 | Sort List | Sort tasks by priority. | The tasks are going to be sorted by the selected priority |
-| 4.4.4 | Sort List | Sort tasks by status. | The tasks are going to be sorted by the selected status. |
+| 4.4.2 | View a list | Select a task list.	 | The page of the selected list opens. |
+| 4.4.3 | View a task | Select a task to be removed.	| The page of the selected task opens. |
+| 4.4.4 | Remove a task | Remove the task from the list.	 | The task is successfully deleted and removed from the list. |
 
-#### 4.5 Task Filtering
+#### 4.5 Sort a list of tasks (ASC)
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.5.1 | Start | Open the application. | The application starts running. |
-| 4.5.2 | Remove Task | Apply filters to display tasks based on due date. | The tasks are going to be filtered by the selected due date. |
-| 4.5.3 | Remove Task | Apply filters to display tasks based on priority. | The tasks are going to be filtered by the selected priority. |
-| 4.5.4 | Remove Task | Apply filters to display tasks based on status. | The tasks are going to be filtered by the selected status. |
+| 4.5.2 | View a list | Select a task list.	 | The page of the selected list opens. |
+| 4.5.3 | Sort by ASC order | Sort the tasks based on due date. | Tasks are correctly sorted by the names. |
 
-#### 4.6 Task List Interaction
+#### 4.6 Sort DESC a list of tasks (DESC)
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.6.1 | Start | Open the application. | The application starts running. |
-| 4.6.2 | Edit Task | Select a task from the list. | Task details are displayed, and options (edit, delete) are available. |
-| 4.6.3 | Save | Save the task. | The application shows the task on the screen. |
+| 4.6.2 | View a list | Select a task list.	 | The page of the selected list opens. |
+| 4.6.3 | Sort by DESC order | Sort the tasks based on priority. | Tasks are correctly sorted by the names. |
 
-#### 4.7 User Interface Responsiveness
+#### 4.7 Filter a list of tasks by date
 | Step | Title | Description | Expected Result |
 | --- | --- | --- | --- |
 | 4.7.1 | Start | Open the application. | The application starts running. |
-| 4.7.2 | Window | Resize the application window. | UI elements adapt to different window sizes without loss of functionality. |
-| 4.7.3 | Close | Close the application. | The application stops running. |
+| 4.7.2 | Filter by date | Filter the tasks based on the due date. | Tasks are correctly filtered by their due dates. |
+
+#### 4.8 Filter a list of tasks by priority
+| Step | Title | Description | Expected Result |
+| --- | --- | --- | --- |
+| 4.8.1 | Start | Open the application. | The application starts running. |
+| 4.8.2 | Filter by priority | Filter the tasks based on priority. | Tasks are correctly filtered by their priority. |
+
+#### 4.9 Filter a list of tasks by status
+| Step | Title | Description | Expected Result |
+| --- | --- | --- | --- |
+| 4.9.1 | Start | Open the application. | The application starts running. |
+| 4.9.2 | Filter by status | Filter the tasks based on status (e.g., In Progress, Completed). | Tasks are correctly filtered by their status. |
 
 ### 5. MoSCoW
 #### 5.1 Must-Have
 | Title | Description |
 | --- | --- |
-| Add a task | As a user, I want to add a new task to the task list with attributes like name, due date, priority, and status. |
-| Edit a task | As a user, I want to edit an existing task's attributes to keep information up-to-date. |
-| Remove a task | As a user, I want to delete a task from the list when it is no longer relevant. |
+| Add a list | As a user, I want to organize my tasks. |
+| Edit a list | As a user, I want to change the name of the list. |
+| Remove a list | As a user, I want to remove a list. |
+| Add a task | As a user, I want to add tasks to a list. |
+| Edit a task | As a user, I want to update my tasks. |
+| Remove a task | As a user, I want to remove old tasks from the list. |
 
 #### 5.2 Should-Have
 | Title | Description |
 | --- | --- |
-| Task List Interactions | As a user, I want to interact with the task list, selecting and viewing tasks easily. |
-| User Interface Responsiveness | As a user, I expect the application's user interface to be responsive to different window sizes. |
+| View list | As a user, I want to view the tasks of a list. |
+| View task | As a user, I want to see the details of a specific task. |
+| Task Notifications | As a user, I want to receive notifications for upcoming, overdue tasks. |
 
 #### 5.3 Could-Have
 | Title | Description |
 | --- | --- |
-| Sort tasks by due date | As a user, I want to sort tasks based on due date for better organization. |
-| Sort tasks by priority | As a user, I want to sort tasks based on priority for better organization. |
-| Sort tasks by status | As a user, I want to sort tasks based on status for better organization. |
-| Filter tasks by due date | As a user, I want to apply filters to display tasks based on due date. |
-| Filter tasks by priority | As a user, I want to apply filters to display tasks based on priority. |
-| Filter tasks by status | As a user, I want to apply filters to display tasks based on status. |
+| Filter the tasks | As a user, I want to filter tasks based on attributes like due date, priority, or status within the list. |
+| Sort the tasks | As a user, I want to sort tasks based on their names (ASC, DESC). |
+| Sort the lists | As a user, I want to sort lists based on their names (ASC, DESC). |
 
 #### 5.4 Won't-Have
 | Title | Description |
 | --- | --- |
-| Add image | As a user, I don't need to add an image. |
-| Add video | As a user, I don't need to add a video. |
-| Add document | As a user, I don't need to add a document. |
+| Attachments | Users won’t be able to attach images, documents, or other media to tasks. |
+| Comments | Users won’t have the ability to add comments or notes within tasks. |
+| Shares | There will be no built-in functionality for sharing tasks with other users. |
 
 ### 6. Timetable
 *These dates might be changed during the process of the project.*
 
 | Date | Title | Description | 
 | --- | --- | --- |
-| February 4 | Start | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
-| February 5 | Dev | Building up the structure of the project within Visual Studio. |
-| February 6 | Dev | Building up the necessary methods of the project. |
-| February 11 | Dev | Fixing UI and methods. Remain tasks: sort, filter, edit date, priority, status. |
-| February 12 | Dev | Make a fancy UI. Add comments and review the code. |
-| February 13 | Test | Test. |
+| October 22 | Finalize the design, layout and tests. Comment and review. Create a new presentation video. |
+| October 21 | Update the code. Fix up the diagrams, documentation and implementation according to the feedback. |
 | May 1 - June 2 | End | Write a User Manual for the Windows application.  |
+| February 13 | Test | Debug and make sure the application runs. |
+| February 12 | Dev | Make a fancy UI. Add comments and review the code. |
+| February 11 | Dev | Fixing UI and methods. Remain tasks: sort, filter, edit date, priority, status. |
+| February 6 | Dev | Building up the necessary methods of the project. |
+| February 5 | Dev | Building up the structure of the project within Visual Studio. |
+| February 4 | Start | Create the UML and a use case diagram. Write the start document. Plan out the project for the next days and weeks. Write user stories (MoSCoW). |
 
 ### 7. User Manual
 #### 7.1 Overview
-*This application increased productivity and was a great way to practice the C# programming language for something useful.*
+This application significantly boosts productivity by providing a well-organized and systematic approach to task management. It allows users to easily prioritize, track, and manage their tasks in a streamlined manner. Additionally, this project serves as an excellent opportunity for honing C# programming skills, as it requires the implementation of various programming concepts and techniques. Ultimately, it delivers a practical and functional tool that helps individuals and teams efficiently organize their work and stay focused on their goals.
 
 #### 7.2 Getting Started
 | Step | Title | Description |
 | --- | --- | --- |
-| 1 | Download | Clone the repository. |
-| 2 | Open | Open the project in Visual Studio 2022 or Blend for Visual Studio 2022. |
-| 3 | Start | Run the application. |
-| 4 | Use | Start using the application (add, edit, remove). |
+| 1 | Download | Clone the repository from the provided GitHub link. |
+| 2 | Open | Open the project in Visual Studio 2022. |
+| 3 | Start | Build the solution and run the application. |
+| 4 | Use | Begin using the application by creating and managing task lists and tasks. |
 
 #### 7.3 User Interface
 | Pages | Description |
 | --- | --- |
-| Home | See the task manager application. |
-| Task List | See a task list with a default task. |
+| Home | 	Displays the main interface of the task manager application with the prioritized tasks and all lists. |
+| Task List | Displays tasks within the selected list, including options to add, edit, or remove tasks. |
+| Task View | Shows detailed information about a selected task, allowing users to modify task attributes. |
 
 #### 7.4 Task Management
 | Action | Description |
 | --- | --- |
-| Create | Add a new task to the list. |
-| Edit | Edit a task on the list. |
-| Delete | Remove a task you no longer need. |
-| Sort | Sort your tasks as you wish to see them. |
-| Filter | Filter your tasks as you wish to see them. |
+| Create List | Organize tasks by creating a new task list. |
+| Edit List | Change the name of an existing task list. |
+| Remove List | Remove a task list that is no longer needed. |
+| Create Task | Add a new task to the selected list with attributes like name, due date, and priority. |
+| Edit Task | Update attributes of an existing task, such as its name, due date, priority, or status. |
+| Remove Task | Remove a task that is no longer relevant from the list. |
+| View Task | See the details of a specific task, including its attributes. |
+| Sort Tasks | Organize tasks based on attributes like name (ascending or descending). |
+| Filter Tasks | Apply filters to display tasks based on attributes like due date, priority, or status. |
 
 ### 8. Additional Information
-Virag Szabo | BS | Information Technology | February - June 2024
+Virag Szabo | BS | Information Technology | February - October 2024
