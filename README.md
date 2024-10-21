@@ -39,7 +39,7 @@ The primary objective of this project is to develop a task management applicatio
 ### 2. Diagrams
 #### 2.1. Unified Modeling Language (UML) 
 | Class | Description | Methods |
-| --- | --- |
+| --- | --- | --- |
 | TaskManager | It contains a list of task lists (TaskList objects) and tracks the currently selected task. | It provides methods for creating, removing, and updating task lists, as well as methods for sorting and filtering tasks at the application level. Acts as the "Controller" in an MVC architecture. | 
 | TaskList | It represents a list of tasks, containing a collection of Task objects. | It provides methods for adding, editing, removing tasks, and performing list-level operations like sorting, filtering, or searching tasks. |
 | Task | It represents an individual task. Attributes include task name, description, due date, priority, and status. It may also include methods to update its attributes. | It implements INotifyPropertyChanged to notify the UI when properties (such as status) are updated. |
@@ -49,11 +49,13 @@ The primary objective of this project is to develop a task management applicatio
 | ListView | The view that displays all tasks in a selected TaskList. | Users can sort, filter, or search for tasks from this view, and it updates based on the TaskList data source. |
 
 #### 2.2 Class Relationships and Design Patterns
-- **TaskManager** and **TaskList**: It follows the Singleton pattern to ensure a single point of control for task management across the application.
-- **TaskList** and **Task**: Each TaskList contains multiple Task objects, forming a one-to-many relationship.
-- **Task**: It could implement the Observer pattern using events (e.g., INotifyPropertyChanged) to notify the user interface when task properties change. This ensures that updates in task details are reflected across all relevant views in real-time.
-- **TaskView** and **ListView**: The Task class is bound to the user interface using data-binding principles. Whenever task attributes such as name, due date, or status are updated, the corresponding UI views are automatically updated to reflect these changes.
-- **Status** and **Priority**: Both Priority and Status enums are used throughout the application for filtering, sorting, and intuitively displaying tasks. They also play a role in defining the business logic (e.g., only Progress tasks are displayed by default on the home screen).
+| Name | Description |
+| --- | --- |
+| **TaskManager** and **TaskList** | It follows the Singleton pattern to ensure a single point of control for task management across the application. |
+| **TaskList** and **Task** | Each TaskList contains multiple Task objects, forming a one-to-many relationship. | 
+| **Task** | It could implement the Observer pattern using events (e.g., INotifyPropertyChanged) to notify the user interface when task properties change. This ensures that updates in task details are reflected across all relevant views in real-time. | 
+| **TaskView** and **ListView** | The Task class is bound to the user interface using data-binding principles. Whenever task attributes such as name, due date, or status are updated, the corresponding UI views are automatically updated to reflect these changes. | 
+| **Status** and **Priority** | Both Priority and Status enums are used throughout the application for filtering, sorting, and intuitively displaying tasks. They also play a role in defining the business logic (e.g., only Progress tasks are displayed by default on the home screen). | 
 
 ![The UML Diagram](Diagrams/uml.png)
 
@@ -87,7 +89,7 @@ It focuses on the high-level architecture of the application, showing the differ
 #### 2.7 State Diagram
 Show the process of a task and how its state can change
 
-![The Use Case Diagram](Diagrams/component.png)
+![The Use Case Diagram](Diagrams/state.png)
 
 ### 3. Features
 | Name | Version | Date | Note |
