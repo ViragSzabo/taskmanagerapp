@@ -188,8 +188,8 @@ Ensure the Task Manager application functions as intended, providing users with 
 These dates might be changed during the process of the project.
 | Date | Title | Description | 
 | --- | --- | --- |
-| October 22 | Finalize the design, layout and tests. Comment and review. Create a new presentation video. |
-| October 21 | Update the code. Fix up the diagrams, documentation and implementation according to the feedback. |
+| October 22 | Finalize |  Comment and review. Create a new presentation video. |
+| October 21 | Update | Fix up the diagrams, documentation and implementation according to the feedback. |
 | May 1 - June 2 | End | Write a User Manual for the Windows application.  |
 | February 13 | Test | Debug and make sure the application runs. |
 | February 12 | Dev | Make a fancy UI. Add comments and review the code. |
