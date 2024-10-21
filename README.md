@@ -29,32 +29,65 @@
 - [8. Additional Information](#8-additional-information)
 
 ### 1. Objective
-Develop a task manager application using C# that falls under the category of applications with a standard Windows GUI. The application should allow users to manage their tasks efficiently.
+The primary objective of this project is to develop a task management application utilizing C#. This application aims to provide users with a straightforward yet effective interface for task administration. With a standard Windows graphical user interface, the application will facilitate the creation, viewing, updating, and deletion of tasks, thereby enhancing user productivity and organization.
+
+#### 1.1 Key Features
+- **Home Page:** This page functions as the central hub, providing an overview of task categories or recent tasks, as well as facilitating quick access to other views.
+- **List View:** This feature offers users a categorized overview of all their tasks, thereby enhancing the ability to track multiple task lists (e.g., Work, Personal, etc.). Users can sort, filter, and search for tasks within each category.
+**Task View:** This component presents detailed information regarding each task. Users may add new tasks, modify existing ones, or designate tasks as completed. The view accommodates task priorities, due dates, and status tracking.
 
 ### 2. Diagrams
 #### 2.1. Unified Modeling Language (UML) 
-| Class | Description |
+| Class | Description | Methods |
 | --- | --- |
-| TaskManager | Manages the overall application. Contains a list of the task lists and the currently selected task. Provides methods to create and remove lists. Includes methods for sorting tasks. | 
-| TaskList | Represents a task list screen. Holds a list of tasks. Provides methods to add, edit, and remove tasks. Implements sorting and filtering functionality. |
-| Task | It represents a task with attributes like name, due date, priority, and status. |
-| Priority | This enum represents the priority of a task (High, Medium, Low). |
-| Status | This enum represents the status of a task (Completed, In Progress, Not Started). |
+| TaskManager | It contains a list of task lists (TaskList objects) and tracks the currently selected task. | It provides methods for creating, removing, and updating task lists, as well as methods for sorting and filtering tasks at the application level. Acts as the "Controller" in an MVC architecture. | 
+| TaskList | It represents a list of tasks, containing a collection of Task objects. | It provides methods for adding, editing, removing tasks, and performing list-level operations like sorting, filtering, or searching tasks. |
+| Task | It represents an individual task. Attributes include task name, description, due date, priority, and status. It may also include methods to update its attributes. | It implements INotifyPropertyChanged to notify the UI when properties (such as status) are updated. |
+| Priority | This is an Enum task representing task priority (High, Medium, Low). | It is used to prioritize tasks for better management and display purposes. |
+| Status | This is an enum representing task status (Completed, In Progress, Not Started). | It provides the foundation for task tracking and filtering. |
+| TaskView | A user interface component that displays details for a selected task. | It provides buttons and forms to edit the task, mark it as completed, or delete it. Communicates changes to TaskList. |
+| ListView | The view that displays all tasks in a selected TaskList. | Users can sort, filter, or search for tasks from this view, and it updates based on the TaskList data source. |
+
+#### 2.2 Class Relationships and Design Patterns
+- **TaskManager** and **TaskList**: It follows the Singleton pattern to ensure a single point of control for task management across the application.
+- **TaskList** and **Task**: Each TaskList contains multiple Task objects, forming a one-to-many relationship.
+- **Task**: It could implement the Observer pattern using events (e.g., INotifyPropertyChanged) to notify the user interface when task properties change. This ensures that updates in task details are reflected across all relevant views in real-time.
+- **TaskView** and **ListView**: The Task class is bound to the user interface using data-binding principles. Whenever task attributes such as name, due date, or status are updated, the corresponding UI views are automatically updated to reflect these changes.
+- **Status** and **Priority**: Both Priority and Status enums are used throughout the application for filtering, sorting, and intuitively displaying tasks. They also play a role in defining the business logic (e.g., only Progress tasks are displayed by default on the home screen).
 
 ![The UML Diagram](Diagrams/uml.png)
 
-#### 2.2. Use Case
-The user interacts with the Task Manager App through various actions.
+#### 2.3 Sequence Diagrams
+It captures the interaction between different components or objects within the system over time.
+##### 2.3.1 Task Creation
+The steps to create a task by the user with appropriate methods involving list and UI updates.
 
-| Action | Description |
-| --- | --- |
-| Create Task List | The user can create a new task list. |
-| Add Task | The user can add a new task to the task list. |
-| Edit Task | The user can modify the attributes of an existing task. |
-| Remove Task | The user can delete a task from the task list. |
-| Remove Task List | The user can delete an entire task list. |
+![The UML Diagram](Diagrams/sequence.png)
 
-![The Use Case Diagram](Diagrams/usecase.png)
+#### 2.4 Activity Diagram
+It shows the workflow of tasks and operations in the system.
+##### 2.4.1 Task Completion
+The workflow how a completion of a task looks like within the app.
+
+![The UML Diagram](Diagrams/activity.png)
+
+#### 2.5 Use Case
+It helps represent the different actions that users can perform within the application.
+
+![The Use Case Diagram](Diagrams/usecase-v2.png)
+
+#### 2.6 Component Diagram
+It focuses on the high-level architecture of the application, showing the different components that make up the system.
+- UI Components: TaskView, ListView, MainWindow
+- Business Logic Components: TaskManager, TaskList, Task
+- Data Components: Storage or Data Handling logic
+
+  ![The Use Case Diagram](Diagrams/component.png)
+
+#### 2.7 State Diagram
+Show the process of a task and how its state can change
+
+![The Use Case Diagram](Diagrams/component.png)
 
 ### 3. Features
 | Name | Version | Date | Note |
