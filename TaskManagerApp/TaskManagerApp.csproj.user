@@ -10,10 +10,10 @@
     <Compile Update="EditDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="InputDialog.xaml.cs">
+    <Compile Update="TaskInputDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ListView.xaml.cs">
+    <Compile Update="TaskListView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="TaskView.xaml.cs">
@@ -24,10 +24,10 @@
     <Page Update="EditDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="InputDialog.xaml">
+    <Page Update="TaskInputDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="ListView.xaml">
+    <Page Update="TaskListView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

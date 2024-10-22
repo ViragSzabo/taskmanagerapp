@@ -18,30 +18,27 @@ namespace TaskManagerApp
 
         public void AddTask(Task task)
         {
-            if (task == null)
-            {
-                throw new ArgumentNullException(nameof(task));
-            }
             this.Tasks.Add(task);
-            Console.WriteLine($"Task '{task.Name}' added to '{Name}'.");
         }
 
         public void RemoveTask(Task task)
         {
-            if (this.Tasks.Contains(task))
+            this.Tasks.Remove(task);
+        }
+
+        public void UpdateTask(Task existing, Task updated)
+        {
+            // Find and update the task in the Tasks collection
+            var index = Tasks.IndexOf(existing);
+            if (index != -1)
             {
-                this.Tasks.Remove(task);
-                Console.WriteLine($"Task '{task.Name}' removed from '{Name}'.");
-            }
-            else
-            {
-                Console.WriteLine($"Task '{task.Name}' not found in the list of '{Name}'.");
+                Tasks[index] = updated;
             }
         }
 
         public ObservableCollection<Task> GetTasks()
         {
-            return this.Tasks;
+            return Tasks;
         }
 
         public IEnumerator<Task> GetEnumerator()

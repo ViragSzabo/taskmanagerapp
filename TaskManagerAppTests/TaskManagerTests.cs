@@ -4,8 +4,8 @@
     public class TaskManagerTests
     {
         private TaskManager TaskManager = new TaskManager();
-        private Task Task = new Task("Test Task", "Test Description", DateTime.Today, Priority.HIGH, Status.Completed);
-        private Task ActiveTask = new Task("Active Task", "Test Description", DateTime.Today, Priority.HIGH, Status.InProgress);
+        private Task Task = new Task("Test Task", "Test Description", DateTime.Today);
+        private Task ActiveTask = new Task("Active Task", "Test Description", DateTime.Today);
 
         [TestMethod()]
         public void TaskManagerTest()

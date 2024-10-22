@@ -3,7 +3,7 @@
     [TestClass()]
     public class TaskTests
     {
-        Task newTask = new Task("Default", "Default", DateTime.Today, Priority.HIGH, Status.InProgress);
+        Task newTask = new Task("Default", "Default", DateTime.Today);
 
         [TestMethod()]
         public void TaskTest()
@@ -14,7 +14,7 @@
         [TestMethod()]
         public void markAsCompleteTest()
         {
-            Task newTask = new Task("Default", "Default", DateTime.Today, Priority.HIGH, Status.InProgress);
+            Task newTask = new Task("Default", "Default", DateTime.Today);
             newTask.Status = Status.InProgress;
             Assert.AreEqual(Status.InProgress, newTask.Status);
             newTask.Status = Status.Completed;
@@ -24,7 +24,7 @@
         [TestMethod()]
         public void EditTaskTest()
         {
-            newTask.EditTask("Clean up", "Vacuum the floor", DateTime.Now, Priority.MEDIUM);
+            newTask.EditTask("Clean up", "Vacuum the floor", DateTime.Now);
             Assert.AreEqual("Clean up", newTask.Name);
         }
     }

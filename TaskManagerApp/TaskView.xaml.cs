@@ -6,51 +6,66 @@ namespace TaskManagerApp
     public partial class TaskView : Window
     {
         public Task SelectedTask { get; set; }
-        public event Action<Task> TaskCompleted;
+        public event Action<Task>? TaskCompleted; // Make it nullable
 
         public TaskView(Task task)
         {
             InitializeComponent();
             SelectedTask = task;
-            DataContext = this; // Set the DataContext to the current instance
+            DataContext = this;
         }
 
         private void MarkAsCompleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedTask != null)
             {
-                SelectedTask.Status = Status.Completed; // Update status
-                TaskCompleted?.Invoke(SelectedTask); // Raise the event
-                MessageBox.Show($"Task '{SelectedTask.Name}' marked as complete.");
-                Close(); // Close the TaskView after marking as complete
+                try
+                {
+                    SelectedTask.MarkAsComplete();
+                    TaskCompleted?.Invoke(SelectedTask);
+                    MessageBox.Show($"Task '{SelectedTask.Name}' marked as complete.");
+                    Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error marking task as complete: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Close(); // Close the TaskView
-        }
-
-        private void taskListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (TaskListBox.SelectedItem is Task selectedTask)
-            {
-                TaskView taskView = new TaskView(selectedTask);
-                taskView.ShowDialog(); // Show the task view as a dialog
-            }
+            Close();
         }
 
         private void EditTaskButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedTask != null)
             {
-                EditDialog editDialog = new EditDialog(SelectedTask);
+                EditDialog editDialog = new EditDialog(SelectedTask.Name, SelectedTask.Description)
+                {
+                    TaskName = null,
+                    TaskDescription = null
+                }; // Initialize with existing task details
+                editDialog.LoadTaskDetails(SelectedTask); // Load existing task details
+
                 if (editDialog.ShowDialog() == true)
                 {
-                    // Update the task with the edited values
-                    SelectedTask.EditTask(editDialog.TaskName, editDialog.TaskDescription, editDialog.DueDate, editDialog.TaskPriority);
-                    MessageBox.Show($"Task '{SelectedTask.Name}' updated successfully.");
+                    try
+                    {
+                        // Update the task with the edited values
+                        SelectedTask.EditTask(editDialog.TaskName, editDialog.TaskDescription, editDialog.DueDate);
+                        MessageBox.Show($"Task '{SelectedTask.Name}' updated successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error updating task: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("No task selected for editing.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
     }

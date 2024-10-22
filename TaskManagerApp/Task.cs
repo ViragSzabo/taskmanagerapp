@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace TaskManagerApp
@@ -13,28 +14,26 @@ namespace TaskManagerApp
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
-        public Task(string name, string description, DateTime dueDateTime, Priority priority, Status status)
+        public Task(string Name, string Description, DateTime DueDateTime)
         {
-            this.Name = name;
-            this.Description = description;
-            this.DueDateTime = dueDateTime;
-            this.Priority = priority;
-            this.Status = status;
+            this.Name = Name;
+            this.Description = Description;
+            this.DueDateTime = DueDateTime;
+            this.Priority = Priority.Low;
+            this.Status = Status.InProgress;
         }
 
-        public void markAsComplete()
+        public void MarkAsComplete()
         {
             this.Status = Status.Completed;
-            Console.WriteLine($"Task '{Name}' marked as completed.");
         }
 
-        public void EditTask(string updatedName, string updatedDescription, DateTime updatedDueDateTime, Priority updatedPriority)
+        public void EditTask(string updatedName, string updatedDescription, DateTime? updatedDueDateTime)
         {
             this.Name = updatedName;
             this.Description = updatedDescription;
-            this.DueDateTime = updatedDueDateTime;
-            this.Priority = updatedPriority;
-            Console.WriteLine($"Task '{Name}' updated.");
+            if (updatedDueDateTime.HasValue)
+                this.DueDateTime = updatedDueDateTime.Value;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -50,6 +49,16 @@ namespace TaskManagerApp
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        public string GetDisplayName()
+        {
+            var displayName = typeof(Priority)
+                .GetField(this.Priority.ToString())
+                ?.GetCustomAttributes(typeof(DisplayNameAttribute), false)
+                .FirstOrDefault() as DisplayNameAttribute;
+
+            return displayName != null ? displayName.Name : this.Priority.ToString();
         }
     }
 }

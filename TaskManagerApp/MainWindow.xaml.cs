@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows;
 
 namespace TaskManagerApp
@@ -14,96 +13,63 @@ namespace TaskManagerApp
         public MainWindow()
         {
             InitializeComponent();
-            TaskLists = new ObservableCollection<TaskList>();
-            HighPriorityTasks = new ObservableCollection<Task>();
+            TaskLists = new ObservableCollection<TaskList>(); // Initialize task lists
+            HighPriorityTasks = new ObservableCollection<Task>(); // Initialize high-priority tasks
             DataContext = this; // Set the DataContext for data binding
         }
 
-        // Add Task Button Click Event
-        private void AddTaskList_Click(object sender, RoutedEventArgs e)
+        // Add Task List Button Click Event
+        private void AddList_Click(object sender, RoutedEventArgs e)
         {
-            InputDialog inputDialog = new InputDialog();
+            TaskInputDialog inputDialog = new TaskInputDialog(); // Open dialog to get task list name
             if (inputDialog.ShowDialog() == true)
             {
-                // Assume you want to add to the first task list for simplicity
-                if (TaskLists.Count > 0)
-                {
-                    TaskList newList = new TaskList(inputDialog.Name);
-                    TaskLists.Add(newList);
-                    newList.AddTask(new Task("Default", "Default task", DateTime.Today, Priority.LOW, Status.NotStarted));
-
-
-                    // Add to high priority Tasks if applicable
-                    foreach (Task task in newList.Tasks)
-                    {
-                        if (task.Priority == Priority.HIGH && task.Status == Status.InProgress)
-                        {
-                            HighPriorityTasks.Add(task);
-                        }
-                    }
-                }
-                OnPropertyChanged(nameof(TaskLists));
+                TaskList newList = new TaskList(inputDialog.Task.Name); // Use the correct property for the name
+                TaskLists.Add(newList); // Add new list to the collection
+                UpdateHighPriorityTasks(); // Update high-priority tasks
+                OnPropertyChanged(nameof(TaskLists)); // Notify the UI of changes
             }
         }
 
-        private void RemoveTask_Click(object sender, RoutedEventArgs e)
+        // Remove Task or Task List Button Click Event
+        private void RemoveList_Click(object sender, RoutedEventArgs e)
         {
-            if (TaskListBox.SelectedItem is Task selectedTask)
+            if (TaskListBox.SelectedItem is TaskList selectedList)
             {
-                // Find the task list that contains this task
-                foreach (var taskList in TaskLists)
-                {
-                    if (taskList.Tasks.Contains(selectedTask))
-                    {
-                        taskList.RemoveTask(selectedTask); // Remove task from task list
-                        break;
-                    }
-                }
-                HighPriorityTasks.Remove(selectedTask);
+                TaskLists.Remove(selectedList); // Remove the entire task list
+                UpdateHighPriorityTasks(); // Update high-priority tasks
+                OnPropertyChanged(nameof(TaskLists)); // Notify the UI of changes
             }
-            else if (TaskListBox.SelectedItem is TaskList selectedList)
-            {
-                TaskLists.Remove(selectedList); // Remove the entire list
-            }
-
-            OnPropertyChanged(nameof(HighPriorityTasks));
-            OnPropertyChanged(nameof(TaskLists)); // Notify changes
         }
 
-        // Clear Filter Button Click Event
-        private void ClearFilter_Click(object sender, RoutedEventArgs e)
-        {
-            // LOGIC later
-        }
-
+        // Task List Selection Changed Event
         private void TaskListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (TaskListBox.SelectedItem is Task selectedTask)
+            if (TaskListBox.SelectedItem is TaskList selectedList)
             {
-                TaskView taskView = new TaskView(selectedTask);
-                taskView.TaskCompleted += TaskView_TaskCompleted; // Subscribe to the event
-                taskView.ShowDialog(); // Show the task view as a dialog
+                TaskListView taskListView = new TaskListView(selectedList); // Open task list view dialog
+                taskListView.ShowDialog(); // Show the task list view
             }
-        }
-
-        private void TaskView_TaskCompleted(Task completedTask)
-        {
-            // Remove from high priority if necessary
-            if (HighPriorityTasks.Contains(completedTask))
-            {
-                HighPriorityTasks.Remove(completedTask);
-            }
-
-            // You can also notify changes here if necessary
-            OnPropertyChanged(nameof(HighPriorityTasks));
         }
 
         // Property changed notification for data binding
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // Method to retrieve high-priority tasks and update the collection
+        private void UpdateHighPriorityTasks()
+        {
+            HighPriorityTasks.Clear();
+            var highPriorityTasks = TaskLists.SelectMany(t => t.Tasks)
+                .Where(task => task.Priority == Priority.High);
+            foreach (var task in highPriorityTasks)
+            {
+                HighPriorityTasks.Add(task);
+            }
         }
     }
 }
