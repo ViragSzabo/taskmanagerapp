@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace TaskManagerApp
 {
@@ -12,12 +13,12 @@ namespace TaskManagerApp
         public TaskInputDialog()
         {
             InitializeComponent();
-            Task = new Task("", "", DateTime.Now);
         }
 
         // Click event handler for the "Add Task" button
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
+            Task = new Task("", "", DateTime.Now);
             // Validate input before closing
             if (ValidateInputs())
             {

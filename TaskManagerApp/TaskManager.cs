@@ -37,12 +37,10 @@ namespace TaskManagerApp
             return CurrentTasks;
         }
 
-        public TaskList CreateList(string listName)
+        public void CreateList(string listName)
         {
-            TaskList newList = new TaskList(listName);
-            TaskLists.Add(newList);
+            TaskLists.Add(new TaskList(listName));
             Console.WriteLine($"Task list '{listName}' created.");
-            return newList;
         }
 
         public void DeleteList(TaskList list)
@@ -99,20 +97,16 @@ namespace TaskManagerApp
         {
             try
             {
-                // Create the serializer for the ObservableCollection<TaskList> type
-                XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<TaskList>));
-
-                // Save data to the XML file
-                using (StreamWriter writer = new StreamWriter(filePath))
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    serializer.Serialize(writer, TaskLists);
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<TaskList>));
+                    serializer.Serialize(stream, new List<TaskList>(TaskLists));
                 }
-
-                Console.WriteLine("Data saved successfully to XML file.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving data: {ex.Message}");
+                // Log the error or display a message to the user
+                Console.WriteLine($"Error saving tasks: {ex.Message}");
             }
         }
 
@@ -120,25 +114,22 @@ namespace TaskManagerApp
         {
             try
             {
-                // Check if the file exists
                 if (File.Exists(filePath))
                 {
-                    // Create the serializer for the ObservableCollection<TaskList> type
-                    XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<TaskList>));
-
-                    // Load data from the XML file
-                    using (StreamReader reader = new StreamReader(filePath))
+                    using (var stream = new FileStream(filePath, FileMode.Open))
                     {
-                        TaskLists = (ObservableCollection<TaskList>)serializer.Deserialize(reader)!;
+                        XmlSerializer serializer = new XmlSerializer(typeof(List<TaskList>));
+                        var taskLists = (List<TaskList>)serializer.Deserialize(stream)!;
+                        foreach (var taskList in taskLists)
+                        {
+                            TaskLists.Add(taskList);
+                        }
                     }
-
-                    Console.WriteLine("Data loaded successfully from XML file.");
                 }
                 else
                 {
-                    // If file doesn't exist, initialize an empty collection
-                    TaskLists = new ObservableCollection<TaskList>();
-                    Console.WriteLine("No XML file found, initialized with an empty task list.");
+                    // Optionally create default structure or log message
+                    TaskLists.Add(new TaskList("Default List")); // Create a default list if file doesn't exist
                 }
             }
             catch (Exception ex)
