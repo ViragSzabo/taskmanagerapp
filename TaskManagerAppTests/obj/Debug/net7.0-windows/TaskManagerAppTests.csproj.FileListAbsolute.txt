@@ -1,4 +1,10 @@
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\CoverletSourceRootsMapping_TaskManagerAppTests
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.csproj.AssemblyReference.cache
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.AssemblyInfoInputs.cache
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.AssemblyInfo.cs
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.csproj.CoreCompileInputs.cache
+C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.sourcelink.json
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\testhost.dll
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\TaskManagerApp.deps.json
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\TaskManagerApp.runtimeconfig.json
@@ -104,12 +110,6 @@ C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\T
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\TaskManagerApp.dll
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\TaskManagerApp.pdb
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\bin\Debug\net7.0-windows\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.csproj.AssemblyReference.cache
-C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.AssemblyInfoInputs.cache
-C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.AssemblyInfo.cs
-C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.csproj.CoreCompileInputs.cache
-C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.sourcelink.json
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskMana.16EA129E.Up2Date
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\TaskManagerAppTests.dll
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerAppTests\obj\Debug\net7.0-windows\refint\TaskManagerAppTests.dll

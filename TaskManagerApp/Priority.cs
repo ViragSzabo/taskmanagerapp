@@ -1,7 +1,14 @@
-﻿namespace TaskManagerApp
+﻿using System.ComponentModel;
+
+namespace TaskManagerApp
 {
     public enum Priority
     {
-        LOW, MEDIUM, HIGH
+        [DisplayName("Low Priority")]
+        Low,
+        [DisplayName("Medium Priority")]
+        Medium,
+        [DisplayName("High Priority")]
+        High
     }
 }
