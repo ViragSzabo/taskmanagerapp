@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace TaskManagerApp
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            // If you want to pass a TaskList object to ListView
+            MainWindow win = new MainWindow();
+            TaskList taskList = new TaskList("My Tasks"); // Example initialization
+            ListView listView = new ListView(taskList); // Pass the taskList to the ListView
+            win.Show();
+            //listView.Show(); // Show the ListView
+        }
     }
 }

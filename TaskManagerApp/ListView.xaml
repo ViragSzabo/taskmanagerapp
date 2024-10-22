@@ -1,0 +1,27 @@
+﻿<Window x:Class="TaskManagerApp.ListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Task List" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="{Binding TaskList.Name}" FontSize="24" FontWeight="Bold" Margin="10" />
+
+            <ListView x:Name="TasksListView" ItemsSource="{Binding Tasks}" SelectionChanged="TasksListView_SelectionChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Task Name" DisplayMemberBinding="{Binding Name}" Width="200" />
+                        <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="150" />
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="100" />
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Button Content="Add Task" Click="AddTaskButton_Click" Margin="10" />
+            <Button Content="Remove Task" Click="RemoveTaskButton_Click" Margin="10" />
+            <Button Content="Edit Task" Click="EditTaskButton_Click" Margin="10" />
+
+            <TextBlock x:Name="SelectedTaskDetails" FontSize="16" Margin="10" />
+        </StackPanel>
+    </Grid>
+</Window>
