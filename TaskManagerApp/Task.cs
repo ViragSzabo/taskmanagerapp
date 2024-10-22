@@ -28,12 +28,18 @@ namespace TaskManagerApp
             this.Status = Status.Completed;
         }
 
-        public void EditTask(string updatedName, string updatedDescription, DateTime? updatedDueDateTime)
+        public void EditTask(string updatedName, 
+            string updatedDescription, 
+            DateTime? updatedDueDateTime,
+            Priority updatedPriority,
+            Status updatedStatus)
         {
             this.Name = updatedName;
             this.Description = updatedDescription;
             if (updatedDueDateTime.HasValue)
                 this.DueDateTime = updatedDueDateTime.Value;
+            this.Priority = updatedPriority;
+            this.Status = updatedStatus;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

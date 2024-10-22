@@ -16,9 +16,6 @@ namespace TaskManagerApp
 
         public ObservableCollection<Task> AddActiveTasks()
         {
-            // Clear current active tasks before adding new ones
-            CurrentTasks.Clear();
-
             // Loop through each task list
             foreach (var list in TaskLists)
             {
@@ -37,10 +34,11 @@ namespace TaskManagerApp
             return CurrentTasks;
         }
 
-        public void CreateList(string listName)
+        public ObservableCollection<TaskList> CreateList(string listName)
         {
             TaskLists.Add(new TaskList(listName));
             Console.WriteLine($"Task list '{listName}' created.");
+            return TaskLists;
         }
 
         public void DeleteList(TaskList list)

@@ -6,6 +6,7 @@
         private TaskManager TaskManager = new TaskManager();
         private Task Task = new Task("Test Task", "Test Description", DateTime.Today);
         private Task ActiveTask = new Task("Active Task", "Test Description", DateTime.Today);
+        private TaskList list = new TaskList("DefaultTest");
 
         [TestMethod()]
         public void TaskManagerTest()
@@ -31,12 +32,27 @@
         [TestMethod()]
         public void AddActiveTasksTest()
         {
-            TaskList list = TaskManager.CreateList("My Task");
-            list.AddTask(Task);
+            TaskManager.CreateList("list");  // Creates a new list, but you're using a local `list`
+            TaskManager.TaskLists.Add(list);  // Make sure to add the list to TaskManager
+
             list.AddTask(ActiveTask);
+            list.AddTask(Task);
+
+            Task.EditTask("Task",
+                "Test Description",
+                DateTime.Today,
+                Priority.Medium,
+                Status.InProgress);
+            ActiveTask.EditTask("Active Task",
+                "Test Description",
+                DateTime.Today,
+                Priority.High,
+                Status.InProgress);
+
             var result = TaskManager.AddActiveTasks();
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("Active Task", result[0].Name);
+
+            Assert.AreEqual(1, result.Count);  // Should now match
+            Assert.AreEqual("Active Task", result[0].Name);  // Verifying the name
         }
 
         [TestMethod()]

@@ -18,7 +18,14 @@ namespace TaskManagerApp
 
         public void AddTask(Task task)
         {
-            this.Tasks.Add(task);
+            if(!Tasks.Contains(task))
+            {
+                this.Tasks.Add(task);
+            }
+            else
+            {
+                Console.WriteLine($"{task} is already in the list.");
+            }
         }
 
         public void RemoveTask(Task task)

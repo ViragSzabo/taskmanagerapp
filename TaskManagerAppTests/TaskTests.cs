@@ -24,7 +24,7 @@
         [TestMethod()]
         public void EditTaskTest()
         {
-            newTask.EditTask("Clean up", "Vacuum the floor", DateTime.Now);
+            newTask.EditTask("Clean up", "Vacuum the floor", DateTime.Now, Priority.High, Status.InProgress);
             Assert.AreEqual("Clean up", newTask.Name);
         }
     }

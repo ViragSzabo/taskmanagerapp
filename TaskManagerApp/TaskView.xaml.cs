@@ -54,7 +54,7 @@ namespace TaskManagerApp
                     try
                     {
                         // Update the task with the edited values
-                        SelectedTask.EditTask(editDialog.TaskName, editDialog.TaskDescription, editDialog.DueDate);
+                        SelectedTask.EditTask(editDialog.TaskName, editDialog.TaskDescription, editDialog.DueDate, Priority.High, Status.InProgress);
                         MessageBox.Show($"Task '{SelectedTask.Name}' updated successfully.");
                     }
                     catch (Exception ex)
