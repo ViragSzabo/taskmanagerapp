@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -14,13 +15,13 @@ namespace TaskManagerApp.TaskList
     public class TaskList : IEnumerable<Task>
     {
         public string Name { get; set; }
-        public List<Task> Tasks { get; set; }
+        public ObservableCollection<Task> Tasks { get; set; }
         public ICommand DownloadCommand { get; private set; }
 
         public TaskList(string name)
         {
             Name = name;
-            Tasks = new List<Task>();
+            Tasks = new ObservableCollection<Task>();
             DownloadCommand = new RelayCommand(Download);
         }
 
@@ -103,7 +104,7 @@ namespace TaskManagerApp.TaskList
         /// Retrieves all tasks in the list.
         /// </summary>
         /// <returns>An observable collection of tasks.</returns>
-        public List<Task> GetTasks()
+        public ObservableCollection<Task> GetTasks()
         {
             return Tasks;
         }

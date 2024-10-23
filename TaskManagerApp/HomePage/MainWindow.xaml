@@ -18,24 +18,17 @@
                     FontWeight="Bold" ToolTip="Add a new task list" />
         </StackPanel>
 
+        <!-- ListBox for displaying task lists -->
         <StackPanel Grid.Row="1" Margin="20">
             <TextBlock FontSize="18" FontWeight="Bold" Text="Task Lists" Margin="15,15"/>
             <ListBox x:Name="TaskListBox" Height="200"
-                     ItemsSource="{Binding DesignTaskLists}" 
-                     SelectionChanged="{TaskListBox_SelectionChanged}"
+                     ItemsSource="{Binding TaskManager.TaskLists}" 
+                     DisplayMemberPath="Name"
+                     SelectionChanged="TaskListBox_SelectionChanged"
                      Background="#FFFFFF" 
                      BorderBrush="#D3D3D3" 
                      BorderThickness="1"
                      SelectionMode="Single">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0,5,10,0"/>
-                            <Button Content="Download" Width="80" Click="DownloadButton_Click" 
-                                    CommandParameter="{Binding}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
     </Grid>

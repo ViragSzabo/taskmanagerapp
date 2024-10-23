@@ -26,7 +26,6 @@ namespace TaskManagerApp
             {
                 try
                 {
-                    // The NewTask property should be populated in the AddTaskWindow
                     var newTask = addTaskWindow.TaskToEdit; // Get the new task from the dialog
                     ViewModel.AddTask(newTask); // Add the new task to the ViewModel
                 }
@@ -42,7 +41,6 @@ namespace TaskManagerApp
                 }
             }
         }
-
 
         private void RemoveTaskButton_Click(object sender, RoutedEventArgs e)
         {
@@ -63,23 +61,15 @@ namespace TaskManagerApp
             if (ViewModel.SelectedTask != null)
             {
                 var editTaskWindow = new AddTaskWindow(ViewModel.SelectedTask);
-
                 if (editTaskWindow.ShowDialog() == true)
                 {
-                    NavigateToTaskView(ViewModel.SelectedTask);
+                    // Optionally refresh the view or navigate to the task view
                 }
             }
             else
             {
                 ShowErrorMessage("No task selected to edit.");
             }
-        }
-
-        private void NavigateToTaskView(Task task)
-        {
-            var taskView = new TaskView(task);
-            taskView.Show();
-            this.Hide();
         }
 
         private void PriorityFilterComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
