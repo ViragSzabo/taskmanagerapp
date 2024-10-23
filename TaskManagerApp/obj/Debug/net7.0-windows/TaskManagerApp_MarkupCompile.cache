@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\App.xaml
-51109953090
+6539016283
 
-151745686458
+19568162506
 198-1133866272
-EditDialog.xaml;MainWindow.xaml;TaskInputDialog.xaml;TaskListView.xaml;TaskView.xaml;
+HomePage\ListInputDialog.xaml;HomePage\MainWindow.xaml;TaskList\AddTaskWindow.xaml;TaskList\TaskListView.xaml;TasksBenefits\EditDialog.xaml;TasksBenefits\TaskView.xaml;
 
 False
 

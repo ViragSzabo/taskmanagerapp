@@ -7,33 +7,39 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="EditDialog.xaml.cs">
+    <Compile Update="TaskList\AddTaskWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="TaskInputDialog.xaml.cs">
+    <Compile Update="HomePage\ListInputDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="TaskListView.xaml.cs">
+    <Compile Update="TaskList\TaskListView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="TaskView.xaml.cs">
+    <Compile Update="TasksBenefits\EditDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="TasksBenefits\TaskView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="EditDialog.xaml">
+    <Page Update="TaskList\AddTaskWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="TaskInputDialog.xaml">
+    <Page Update="HomePage\ListInputDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="TaskListView.xaml">
+    <Page Update="TaskList\TaskListView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MainWindow.xaml">
+    <Page Update="HomePage\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="TaskView.xaml">
+    <Page Update="TasksBenefits\EditDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="TasksBenefits\TaskView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
