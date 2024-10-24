@@ -10,14 +10,13 @@ namespace TaskManagerApp.HomePage
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        // Observable collection for task lists
         public TaskManager TaskManager { get; set; }
 
         public MainViewModel()
         {
             TaskManager = new TaskManager
             {
-                TaskLists = new ObservableCollection<TaskList.TaskList>() // Initialize as ObservableCollection
+                TaskLists = new ObservableCollection<TaskList.TaskList>()
             };
 
             // Add some sample task lists for testing
@@ -27,20 +26,9 @@ namespace TaskManagerApp.HomePage
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        // Method to raise the PropertyChanged event
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        // Method to add a new task list
-        public void AddNewTaskList(string listName)
-        {
-            if (string.IsNullOrWhiteSpace(listName))
-                throw new ArgumentException("Task list name cannot be null or empty.", nameof(listName));
-
-            TaskManager.TaskLists.Add(new TaskList.TaskList(listName));
-            OnPropertyChanged(nameof(TaskManager.TaskLists)); // Notify UI of changes
         }
 
         public void AddNewList()
@@ -48,32 +36,45 @@ namespace TaskManagerApp.HomePage
             ListInputDialog listInput = new ListInputDialog();
             if (listInput.ShowDialog() == true && !string.IsNullOrWhiteSpace(listInput.ListName))
             {
-                AddNewTaskList(listInput.ListName);
+                TaskManager.TaskLists?.Add(new TaskList.TaskList(listInput.ListName));
+                OnPropertyChanged(nameof(TaskManager.TaskLists)); // Notify UI
             }
         }
 
-        // Method to save a task list to a specified file path asynchronously
-        public async Task SaveTaskListAsync(TaskList.TaskList list, string filePath)
+        public void LoadTaskListsFromFile(string filePath)
         {
-            if (list == null)
-                throw new ArgumentNullException(nameof(list), "Task list cannot be null.");
-            if (string.IsNullOrWhiteSpace(filePath))
-                throw new ArgumentException("File path cannot be null or empty.", nameof(filePath));
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<TaskList.TaskList>));
+                    using StreamReader reader = new StreamReader(filePath);
+                    TaskManager.TaskLists = (ObservableCollection<TaskList.TaskList>)serializer.Deserialize(reader)!;
+                    OnPropertyChanged(nameof(TaskManager.TaskLists)); // Notify UI 
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error loading task lists: {ex.Message}", ex);
+                }
+            }
+        }
 
-            try
+        // Save Task Lists
+        public async void SaveAllTaskLists(TaskManager taskManager, string filePath)
+        {
+            await Task.Run(() =>
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(TaskList.TaskList));
-                using StreamWriter writer = new StreamWriter(filePath);
-                await Task.Run(() => serializer.Serialize(writer, list));
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw new Exception($"Serialization error: {ex.InnerException?.Message ?? ex.Message}", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error saving task list: {ex.Message}", ex);
-            }
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<TaskList.TaskList>));
+                    using StreamWriter writer = new StreamWriter(filePath);
+                    serializer.Serialize(writer, taskManager.TaskLists);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error saving task lists: {ex.Message}", ex);
+                }
+            });
         }
     }
 }

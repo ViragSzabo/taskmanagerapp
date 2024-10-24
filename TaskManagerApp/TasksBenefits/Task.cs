@@ -4,14 +4,20 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 
 namespace TaskManagerApp.TasksBenefits
 {
     [Serializable] // To be compatible with XML serialization
     public class Task : INotifyPropertyChanged
     {
+        [XmlElement("Title")]
         public string Name { get; set; }
+
+        [XmlElement("Description")]
         public string Description { get; set; }
+
+        [XmlElement("DueDate")]
         public DateTime DueDateTime { get; set; }
         public Priority Priority { get; set; }
         public Status Status { get; set; }

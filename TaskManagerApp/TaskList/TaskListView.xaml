@@ -24,7 +24,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10" HorizontalAlignment="Center">
             <!-- Filters -->
             <StackPanel Orientation="Horizontal" Margin="0,0,20,0">
-                <TextBlock Text="Filter by Priority:" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Text="Priority:" VerticalAlignment="Center" Margin="5"/>
                 <ComboBox x:Name="PriorityFilterComboBox" Width="100" SelectionChanged="PriorityFilterComboBox_SelectionChanged">
                     <ComboBoxItem Content="All" Tag="All"/>
                     <ComboBoxItem Content="Low" Tag="Low"/>
@@ -32,7 +32,7 @@
                     <ComboBoxItem Content="High" Tag="High"/>
                 </ComboBox>
 
-                <TextBlock Text="Filter by Status:" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                <TextBlock Text="Status:" VerticalAlignment="Center" Margin="5,0,5,0"/>
                 <ComboBox x:Name="StatusFilterComboBox" Width="100" SelectionChanged="StatusFilterComboBox_SelectionChanged">
                     <ComboBoxItem Content="All" Tag="All"/>
                     <ComboBoxItem Content="Pending" Tag="Pending"/>
@@ -42,11 +42,9 @@
 
             <!-- Buttons -->
             <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                <Button Content="Add Task" Click="AddTaskButton_Click" Width="100" Margin="5" 
+                <Button Content="Add" Click="AddTaskButton_Click" Width="100" Margin="5" 
                         Background="#007ACC" Foreground="White"/>
-                <Button Content="Edit Task" Click="EditTaskButton_Click" Width="100" Margin="5" 
-                        Background="#007ACC" Foreground="White"/>
-                <Button Content="Remove Task" Click="RemoveTaskButton_Click" Width="100" Margin="5" 
+                <Button Content="Remove" Click="RemoveTaskButton_Click" Width="100" Margin="5" 
                         Background="#D9534F" Foreground="White"/>
             </StackPanel>
         </StackPanel>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TaskManagerApp.TaskList;
@@ -9,12 +11,19 @@ namespace TaskManagerApp.HomePage
     public partial class MainWindow : Window
     {
         private readonly MainViewModel _viewModel;
+        private const string FilePath = "application.xml";
+        private TaskList.TaskList? selectedTaskList;
+        private CancelEventHandler MainWindow_Closing;
 
         public MainWindow()
         {
             InitializeComponent();
             _viewModel = new MainViewModel();
-            DataContext = _viewModel; // Set DataContext for data binding
+            DataContext = _viewModel;
+
+            _viewModel.LoadTaskListsFromFile(FilePath);
+            selectedTaskList = TaskManager.LoadTasks();
+            this.Closing += MainWindow_Closing;
         }
 
         // Add Task List Button Click Event
@@ -23,36 +32,27 @@ namespace TaskManagerApp.HomePage
             _viewModel.AddNewList();
         }
 
-        // Download Button Click Event
-        private void DownloadButton_Click(object sender, RoutedEventArgs e)
+        // Download Button Click Event for All Task Lists
+        private async void DownloadAllTaskLists_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var taskList = button?.CommandParameter as TaskList.TaskList;
-
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*",
-                Title = "Save Task List"
+                Title = "Save All Task Lists"
             };
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
                 {
-                    _viewModel.SaveTaskListAsync(taskList, saveFileDialog.FileName);
-                    MessageBox.Show(
-                        "Task list saved successfully!",
-                        "Success",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    // Make sure to call SaveAllTaskLists asynchronously
+                    _viewModel.SaveAllTaskLists(_viewModel.TaskManager, FilePath);
+                    await Task.Run(() => _viewModel.SaveAllTaskLists(_viewModel.TaskManager, saveFileDialog.FileName));
+                    MessageBox.Show("All task lists saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(
-                        $"An error occurred while downloading the task list: {ex.Message}",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    MessageBox.Show($"An error occurred while downloading all task lists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -60,12 +60,25 @@ namespace TaskManagerApp.HomePage
         // Handle selection changed event for TaskListBox
         private void TaskListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TaskListBox.SelectedItem is TaskList.TaskList selectedTaskList)
+            if (TaskListBox.SelectedItem is TaskList.TaskList selected)
             {
-                var taskListView = new TaskListView(selectedTaskList);
+                selectedTaskList = selected; // Store the selected task list
+                var taskListView = new TaskListView(selected);
                 taskListView.Show();
                 this.Hide();
             }
+            else
+            {
+                selectedTaskList = null; // Reset if nothing is selected
+            }
+        }
+
+        protected override async void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            // Call SaveAllTaskLists asynchronously to avoid blocking the UI thread
+            await Task.Run(() => _viewModel.SaveAllTaskLists(_viewModel.TaskManager, FilePath));
+            TaskManager.SaveTasks(selectedTaskList);
         }
     }
 }

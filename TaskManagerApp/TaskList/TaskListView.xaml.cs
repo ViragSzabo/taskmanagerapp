@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using TaskManagerApp.HomePage;
 using TaskManagerApp.TaskList;
 using TaskManagerApp.TasksBenefits;
 
@@ -12,11 +14,14 @@ namespace TaskManagerApp
     {
         public TaskListViewModel ViewModel { get; set; }
 
+        public TaskList.TaskList selectedTaskList { get; set;  }
+
         public TaskListView(TaskList.TaskList taskList)
         {
             InitializeComponent();
             ViewModel = new TaskListViewModel(taskList);
             DataContext = ViewModel;
+            selectedTaskList = taskList;
             TaskListName.Text = taskList.Name; // Bind the list name to the header
         }
 
@@ -54,22 +59,6 @@ namespace TaskManagerApp
                 string message = "Please select a task to remove.";
                 ShowErrorMessage(message);
                 LogError(message);
-            }
-        }
-
-        private void EditTaskButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel.SelectedTask != null)
-            {
-                var editTaskWindow = new AddTaskWindow(ViewModel.SelectedTask);
-                if (editTaskWindow.ShowDialog() == true)
-                {
-                    // Optionally refresh the view or navigate to the task view
-                }
-            }
-            else
-            {
-                ShowErrorMessage("No task selected to edit.");
             }
         }
 

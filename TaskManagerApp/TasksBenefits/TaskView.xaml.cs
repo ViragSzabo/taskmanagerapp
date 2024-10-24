@@ -18,7 +18,7 @@ namespace TaskManagerApp
 
         private void MarkAsCompleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedTask != null && SelectedTask.Status != Status.Completed)
+            if (SelectedTask.Status != Status.Completed)
             {
                 MessageBoxResult result = MessageBox.Show(
                     $"Are you sure you want to mark '{SelectedTask.Name}' as complete?",

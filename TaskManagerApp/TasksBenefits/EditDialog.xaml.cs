@@ -19,10 +19,10 @@ namespace TaskManagerApp
         private void LoadComboBoxes()
         {
             // Populate the Priority ComboBox
-            PriorityComboBox.ItemsSource = Enum.GetValues(typeof(Priority)); // Assuming Priority is an enum
+            PriorityComboBox.ItemsSource = Enum.GetValues(typeof(Priority)); 
 
             // Populate the Status ComboBox
-            StatusComboBox.ItemsSource = Enum.GetValues(typeof(TaskStatus)); // Assuming TaskStatus is an enum
+            StatusComboBox.ItemsSource = Enum.GetValues(typeof(Status)); 
         }
 
         public void LoadTaskDetails(Task task)
@@ -33,8 +33,8 @@ namespace TaskManagerApp
             TaskNameTextBox.Text = Task.Name;
             TaskDescriptionTextBox.Text = Task.Description;
             TaskDueDatePicker.SelectedDate = Task.DueDateTime;
-            PriorityComboBox.SelectedItem = Task.Priority; // Set the selected item directly
-            StatusComboBox.SelectedItem = Task.Status; // Set the selected item directly
+            PriorityComboBox.SelectedItem = Task.Priority; 
+            StatusComboBox.SelectedItem = Task.Status; 
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -44,15 +44,15 @@ namespace TaskManagerApp
             // Update Task properties from UI controls
             Task.Name = TaskNameTextBox.Text;
             Task.Description = TaskDescriptionTextBox.Text;
-            Task.DueDateTime = TaskDueDatePicker.SelectedDate ?? DateTime.Now; // Default to now if no date is selected
+            Task.DueDateTime = TaskDueDatePicker.SelectedDate ?? DateTime.Now;
 
             // Map selected priority
-            Task.Priority = (Priority)PriorityComboBox.SelectedItem; // Directly cast the selected item
+            Task.Priority = (Priority)PriorityComboBox.SelectedItem; 
 
             // Map selected status
-            Task.Status = (Status)StatusComboBox.SelectedItem; // Directly cast the selected item
+            Task.Status = (Status)StatusComboBox.SelectedItem; 
 
-            DialogResult = true; // Indicate that the dialog was successful
+            DialogResult = true;
             Close();
         }
 
