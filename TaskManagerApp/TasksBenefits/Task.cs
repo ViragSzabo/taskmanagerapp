@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -15,6 +16,12 @@ namespace TaskManagerApp.TasksBenefits
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
+        // Additional properties
+        public DateTime CreatedDateTime { get; private set; }
+        public DateTime? LastUpdatedDateTime { get; private set; }
+        public List<string> Comments { get; set; } = new List<string>();
+
+
         public Task(string Name, string Description, DateTime DueDateTime)
         {
             this.Name = Name;
@@ -22,6 +29,7 @@ namespace TaskManagerApp.TasksBenefits
             this.DueDateTime = DueDateTime;
             Priority = Priority.Medium;
             Status = Status.InProgress;
+            CreatedDateTime = DateTime.Now;
         }
 
         // Mark the task as complete
@@ -40,10 +48,8 @@ namespace TaskManagerApp.TasksBenefits
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                // Simulate some delay or heavy work
+                // Simulate work
                 System.Threading.Tasks.Task.Delay(1000).Wait();
-
-                // Update fields within the task
                 Name = updatedName;
                 Description = updatedDescription;
 
@@ -54,14 +60,15 @@ namespace TaskManagerApp.TasksBenefits
 
                 Priority = updatedPriority;
                 Status = updatedStatus;
+                LastUpdatedDateTime = DateTime.Now; // Update last modified date
             });
 
-            // Notify property change after the task edit completes
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Description));
             OnPropertyChanged(nameof(DueDateTime));
             OnPropertyChanged(nameof(Priority));
             OnPropertyChanged(nameof(Status));
+            OnPropertyChanged(nameof(LastUpdatedDateTime));
         }
 
         // Property change event

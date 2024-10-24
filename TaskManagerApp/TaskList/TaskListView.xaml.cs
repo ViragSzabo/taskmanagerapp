@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using TaskManagerApp.TaskList;
@@ -76,7 +77,7 @@ namespace TaskManagerApp
         {
             if (PriorityFilterComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
-                var selectedPriority = (Priority)Enum.Parse(typeof(Priority), selectedItem.Tag.ToString());
+                var selectedPriority = (Priority?)Enum.Parse(typeof(Priority), selectedItem.Tag.ToString());
                 ViewModel.FilterTasksByPriority(selectedPriority);
             }
         }
@@ -85,7 +86,7 @@ namespace TaskManagerApp
         {
             if (StatusFilterComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
-                var selectedStatus = (Status)Enum.Parse(typeof(Status), selectedItem.Tag.ToString());
+                var selectedStatus = (Status?)Enum.Parse(typeof(Status), selectedItem.Tag.ToString());
                 ViewModel.FilterTasksByStatus(selectedStatus);
             }
         }
@@ -95,12 +96,21 @@ namespace TaskManagerApp
             if (TasksListView.SelectedItem is Task selectedTask)
             {
                 ViewModel.SelectedTask = selectedTask;
-                SelectedTaskDetails.Text = $"Selected Task: {selectedTask.Name} (Status: {selectedTask.Status})";
+                SelectedTaskDetails.Text = $"Selected Task: {selectedTask.Name} is {selectedTask.Status}";
+
+                // Open TaskView for the selected task
+                var taskView = new TaskView(selectedTask);
+                taskView.TaskCompleted += (completedTask) =>
+                {
+                    // Optionally refresh the task list if needed
+                    ViewModel.RemoveTask(completedTask); // Remove the completed task if you want
+                };
+                taskView.ShowDialog(); // Show TaskView as a dialog
             }
             else
             {
                 ViewModel.SelectedTask = null;
-                SelectedTaskDetails.Text = "No task selected.";
+                SelectedTaskDetails.Text = "No task has been selected.";
             }
         }
 
@@ -111,12 +121,13 @@ namespace TaskManagerApp
 
         private bool ShowConfirmationDialog(string message)
         {
-            return MessageBox.Show(message, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+            return MessageBox.Show(message, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) ==
+                   MessageBoxResult.Yes;
         }
 
         private void LogError(string message)
         {
-            Console.WriteLine($"ERROR: {message}"); // Placeholder for actual logging
+            File.AppendAllText("error_log.txt", $"{DateTime.Now}: {message}\n");
         }
     }
 }

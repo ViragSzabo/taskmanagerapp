@@ -1,18 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.Windows.Data;
 using TaskManagerApp.TasksBenefits;
 
 namespace TaskManagerApp.TaskList
 {
     public class TaskListViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Task> Tasks { get; set; }
         private readonly ObservableCollection<Task> _allTasks;
+        public ICollectionView FilteredTasksView { get; }
 
         private Task _selectedTask;
-        public Task SelectedTask
+        public Task SelectedTask 
         {
             get => _selectedTask;
             set
@@ -24,69 +24,60 @@ namespace TaskManagerApp.TaskList
 
         public TaskListViewModel(TaskList taskList)
         {
-            _allTasks = new ObservableCollection<Task>(taskList.GetTasks());
-            Tasks = new ObservableCollection<Task>(_allTasks); // Start with all tasks
+            _allTasks = new ObservableCollection<Task>(taskList.Tasks);
+            FilteredTasksView = CollectionViewSource.GetDefaultView(_allTasks);
         }
 
-        public void AddTask(Task newTask)
+        public void AddTask(Task task)
         {
-            ValidateTask(newTask);
-            Tasks.Add(newTask);
+            _allTasks.Add(task);
         }
 
-        public void RemoveTask(Task taskToRemove)
+        public void RemoveTask(Task task)
         {
-            Tasks.Remove(taskToRemove);
+            _allTasks.Remove(task);
         }
 
-        public void UpdateTask(Task oldTask, Task newTask)
+        public void Clear()
         {
-            ValidateTask(newTask);
-            var index = Tasks.IndexOf(oldTask);
-            if (index != -1)
+            _allTasks.Clear();
+        }
+
+        public bool Contains(Task task)
+        {
+            return _allTasks.Contains(task);
+        }
+
+        public void FilterTasksByPriority(Priority? selectedPriority)
+        {
+            FilteredTasksView.Filter = task =>
             {
-                Tasks[index] = newTask; // Update the task in the collection
-                SelectedTask = newTask; // Update the SelectedTask if needed
-            }
+                var currentTask = task as Task;
+                if (selectedPriority is null or Priority.All)
+                {
+                    return true;
+                }
+                return currentTask.Priority == selectedPriority;
+            };
+            FilteredTasksView.Refresh();
         }
 
-        private void ValidateTask(Task task)
+        public void FilterTasksByStatus(Status? selectedStatus)
         {
-            if (string.IsNullOrWhiteSpace(task.Name))
+            FilteredTasksView.Filter = task =>
             {
-                throw new ValidationException("Task name cannot be empty.");
-            }
+                var currentTask = task as Task;
+                if (selectedStatus is null or Status.All)
+                {
+                    return true;
+                }
+                return currentTask.Status == selectedStatus;
+            };
+            FilteredTasksView.Refresh();
         }
 
-        public void FilterTasksByPriority(Priority priority)
-        {
-            // Filter tasks based on the specified priority
-            var filteredTasks = _allTasks.Where(t => t.Priority == priority).ToList();
-
-            // Clear the current task list and add the filtered tasks
-            Tasks.Clear();
-            foreach (var task in filteredTasks)
-            {
-                Tasks.Add(task);
-            }
-        }
-
-        public void FilterTasksByStatus(Status status)
-        {
-            // Filter tasks based on the specified status
-            var filteredTasks = _allTasks.Where(t => t.Status == status).ToList();
-
-            // Clear the current task list and add the filtered tasks
-            Tasks.Clear();
-            foreach (var task in filteredTasks)
-            {
-                Tasks.Add(task);
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

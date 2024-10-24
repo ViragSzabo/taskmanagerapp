@@ -37,7 +37,6 @@
                     <ComboBoxItem Content="All" Tag="All"/>
                     <ComboBoxItem Content="Pending" Tag="Pending"/>
                     <ComboBoxItem Content="In Progress" Tag="InProgress"/>
-                    <ComboBoxItem Content="Completed" Tag="Completed"/>
                 </ComboBox>
             </StackPanel>
 
@@ -53,17 +52,18 @@
         </StackPanel>
 
         <!-- Task List View -->
-        <ListView x:Name="TasksListView" ItemsSource="{Binding Tasks}" 
+        <ListView x:Name="TasksListView" ItemsSource="{Binding FilteredTasksView}" 
                   SelectedItem="{Binding SelectedTask}" 
                   Margin="10" Grid.Row="2" 
                   SelectionChanged="TasksListView_SelectionChanged"
                   BorderThickness="1" BorderBrush="#C0C0C0">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Task Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                    <GridViewColumn Header="Task Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="150"/>
                     <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="100"/>
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
-                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="150"/>
                 </GridView>
             </ListView.View>
         </ListView>

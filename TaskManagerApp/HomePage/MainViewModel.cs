@@ -13,15 +13,16 @@ namespace TaskManagerApp.HomePage
         // Observable collection for task lists
         public TaskManager TaskManager { get; set; }
 
-        // Expose TaskLists directly from TaskManager
-        public ObservableCollection<TaskList.TaskList>? DesignTaskLists => TaskManager.TaskLists;
-
         public MainViewModel()
         {
-            TaskManager = new TaskManager();
+            TaskManager = new TaskManager
+            {
+                TaskLists = new ObservableCollection<TaskList.TaskList>() // Initialize as ObservableCollection
+            };
+
             // Add some sample task lists for testing
-            TaskManager.TaskLists?.Add(new TaskList.TaskList("Groceries"));
-            TaskManager.TaskLists?.Add(new TaskList.TaskList("Work Projects"));
+            TaskManager.TaskLists.Add(new TaskList.TaskList("Groceries"));
+            TaskManager.TaskLists.Add(new TaskList.TaskList("Work Projects"));
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
