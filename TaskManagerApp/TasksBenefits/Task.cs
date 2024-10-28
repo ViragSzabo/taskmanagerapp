@@ -19,24 +19,30 @@ namespace TaskManagerApp.TasksBenefits
 
         [XmlElement("DueDate")]
         public DateTime DueDateTime { get; set; }
+
         public Priority Priority { get; set; }
         public Status Status { get; set; }
 
-        // Additional properties
-        public DateTime CreatedDateTime { get; private set; }
-        public DateTime? LastUpdatedDateTime { get; private set; }
-        public List<string> Comments { get; set; } = new List<string>();
+        // Change the property to have a public setter
+        [XmlElement("CreatedDateTime")]
+        public DateTime CreatedDateTime { get; set; }
 
+        [XmlElement("LastUpdatedDateTime")]
+        public DateTime? LastUpdatedDateTime { get; set; }
 
-        public Task(string Name, string Description, DateTime DueDateTime)
+        // Constructor with parameters
+        public Task(string name, string description, DateTime dueDateTime)
         {
-            this.Name = Name;
-            this.Description = Description;
-            this.DueDateTime = DueDateTime;
+            Name = name;
+            Description = description;
+            DueDateTime = dueDateTime;
             Priority = Priority.Medium;
             Status = Status.InProgress;
-            CreatedDateTime = DateTime.Now;
+            CreatedDateTime = DateTime.Now; // Initialize in the constructor
         }
+
+        // Parameterless constructor required for serialization
+        public Task() { }
 
         // Mark the task as complete
         public void MarkAsComplete()
@@ -44,7 +50,7 @@ namespace TaskManagerApp.TasksBenefits
             Status = Status.Completed;
         }
 
-        // Edit the task asynchronously using Task.Run()
+        // Edit the task asynchronously
         public async System.Threading.Tasks.Task EditTask(
             string updatedName,
             string updatedDescription,
@@ -93,7 +99,7 @@ namespace TaskManagerApp.TasksBenefits
             return true;
         }
 
-        // Optional method: Get display name for priority enum, for example
+        // Optional method: Get display name for priority enum
         public string GetDisplayName()
         {
             return typeof(Priority)

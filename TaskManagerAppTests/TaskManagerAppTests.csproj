@@ -24,4 +24,10 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HomePage\" />
+    <Folder Include="TaskList\" />
+    <Folder Include="TasksBenefits\" />
+  </ItemGroup>
+
 </Project>

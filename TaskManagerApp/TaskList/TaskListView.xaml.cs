@@ -1,56 +1,56 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using TaskManagerApp.HomePage;
-using TaskManagerApp.TaskList;
 using TaskManagerApp.TasksBenefits;
 
-namespace TaskManagerApp
+namespace TaskManagerApp.TaskList
 {
     public partial class TaskListView : Window
     {
         public TaskListViewModel ViewModel { get; set; }
 
-        public TaskList.TaskList selectedTaskList { get; set;  }
+        public TaskManagerApp.TaskList.TaskList SelectedTaskList { get; set;  }
 
-        public TaskListView(TaskList.TaskList taskList)
+        public TaskListView(TaskManagerApp.TaskList.TaskList taskList)
         {
             InitializeComponent();
             ViewModel = new TaskListViewModel(taskList);
             DataContext = ViewModel;
-            selectedTaskList = taskList;
-            TaskListName.Text = taskList.Name; // Bind the list name to the header
+            SelectedTaskList = taskList;
+            this.Closed += TaskListView_Closed;
         }
 
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            var addTaskWindow = new AddTaskWindow(); // Open the AddTaskWindow
-            if (addTaskWindow.ShowDialog() == true) // Show the dialog
+            var addTaskWindow = new AddTaskWindow(); 
+            if (addTaskWindow.ShowDialog() == true) 
             {
                 try
                 {
-                    var newTask = addTaskWindow.TaskToEdit; // Get the new task from the dialog
-                    ViewModel.AddTask(newTask); // Add the new task to the ViewModel
+                    var newTask = addTaskWindow.TaskToEdit; 
+                    ViewModel.AddTask(newTask);
                 }
                 catch (ValidationException ex)
                 {
-                    ShowErrorMessage(ex.Message); // Show validation error
-                    LogError(ex.Message); // Log the error
+                    ShowErrorMessage(ex.Message); 
+                    LogError(ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    ShowErrorMessage("An unexpected error occurred while adding the task."); // Show generic error
-                    LogError(ex.Message); // Log the error
+                    ShowErrorMessage("An unexpected error occurred while adding the task.");
+                    LogError(ex.Message);
                 }
             }
         }
 
         private void RemoveTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.SelectedTask != null && ShowConfirmationDialog("Are you sure you want to remove this task?"))
+            if (ViewModel.SelectedTask != null 
+                && ShowConfirmationDialog("Are you sure you want to remove this task?"))
             {
                 ViewModel.RemoveTask(ViewModel.SelectedTask);
             }
@@ -64,20 +64,22 @@ namespace TaskManagerApp
 
         private void PriorityFilterComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (PriorityFilterComboBox.SelectedItem is ComboBoxItem selectedItem)
-            {
-                var selectedPriority = (Priority?)Enum.Parse(typeof(Priority), selectedItem.Tag.ToString());
-                ViewModel.FilterTasksByPriority(selectedPriority);
-            }
+            if (PriorityFilterComboBox.SelectedItem is not ComboBoxItem selectedItem) return;
+            var selectedPriority = 
+                (Priority?)Enum.Parse(typeof(Priority),
+                selectedItem.Tag.ToString() 
+                ?? throw new InvalidOperationException());
+            ViewModel.FilterTasksByPriority(selectedPriority);
         }
 
         private void StatusFilterComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (StatusFilterComboBox.SelectedItem is ComboBoxItem selectedItem)
-            {
-                var selectedStatus = (Status?)Enum.Parse(typeof(Status), selectedItem.Tag.ToString());
-                ViewModel.FilterTasksByStatus(selectedStatus);
-            }
+            if (StatusFilterComboBox.SelectedItem is not ComboBoxItem selectedItem) return;
+            var selectedStatus = 
+                (Status?)Enum.Parse(typeof(Status),
+                    selectedItem.Tag.ToString() 
+                    ?? throw new InvalidOperationException());
+            ViewModel.FilterTasksByStatus(selectedStatus);
         }
 
         private void TasksListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -87,14 +89,12 @@ namespace TaskManagerApp
                 ViewModel.SelectedTask = selectedTask;
                 SelectedTaskDetails.Text = $"Selected Task: {selectedTask.Name} is {selectedTask.Status}";
 
-                // Open TaskView for the selected task
                 var taskView = new TaskView(selectedTask);
                 taskView.TaskCompleted += (completedTask) =>
                 {
-                    // Optionally refresh the task list if needed
-                    ViewModel.RemoveTask(completedTask); // Remove the completed task if you want
+                    ViewModel.RemoveTask(completedTask);
                 };
-                taskView.ShowDialog(); // Show TaskView as a dialog
+                taskView.ShowDialog(); 
             }
             else
             {
@@ -103,20 +103,30 @@ namespace TaskManagerApp
             }
         }
 
-        private void ShowErrorMessage(string message)
+        private static void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        private bool ShowConfirmationDialog(string message)
+        private static bool ShowConfirmationDialog(string message)
         {
             return MessageBox.Show(message, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) ==
                    MessageBoxResult.Yes;
         }
 
-        private void LogError(string message)
+        private static void LogError(string message)
         {
             File.AppendAllText("error_log.txt", $"{DateTime.Now}: {message}\n");
+        }
+
+        private void GoBackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void TaskListView_Closed(object? sender, EventArgs e)
+        {
+            Application.Current.MainWindow?.Show(); // Show the existing MainWindow
         }
     }
 }

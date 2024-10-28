@@ -3,18 +3,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Data;
-using System.Xml.Serialization;
 using TaskManagerApp.TasksBenefits;
 
 namespace TaskManagerApp.TaskList
 {
     public class TaskListViewModel : INotifyPropertyChanged
     {
-        private readonly ObservableCollection<Task> _allTasks;
+        private readonly ObservableCollection<Task?> _allTasks;
         public ICollectionView FilteredTasksView { get; }
-
-        private Task _selectedTask;
-        public Task SelectedTask 
+        private Task? _selectedTask;
+        public Task? SelectedTask 
         {
             get => _selectedTask;
             set
@@ -26,7 +24,7 @@ namespace TaskManagerApp.TaskList
 
         public TaskListViewModel(TaskList taskList)
         {
-            _allTasks = new ObservableCollection<Task>(taskList.Tasks);
+            _allTasks = new ObservableCollection<Task?>(taskList.Tasks);
             FilteredTasksView = CollectionViewSource.GetDefaultView(_allTasks);
         }
 
@@ -35,19 +33,9 @@ namespace TaskManagerApp.TaskList
             _allTasks.Add(task);
         }
 
-        public void RemoveTask(Task task)
+        public void RemoveTask(Task? task)
         {
             _allTasks.Remove(task);
-        }
-
-        public void Clear()
-        {
-            _allTasks.Clear();
-        }
-
-        public bool Contains(Task task)
-        {
-            return _allTasks.Contains(task);
         }
 
         public void FilterTasksByPriority(Priority? selectedPriority)
@@ -78,7 +66,7 @@ namespace TaskManagerApp.TaskList
             FilteredTasksView.Refresh();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -11,100 +10,46 @@ using TaskManagerApp.TasksBenefits;
 namespace TaskManagerApp.TaskList
 {
     [XmlRoot("TaskList")]
-    public class TaskList : IEnumerable<Task>
+    public class TaskList : ObservableCollection<Task>
     {
+        [XmlAttribute("Name")]
         public string Name { get; set; }
-
-        [XmlArray("Tasks")]
-        [XmlArrayItem("Task")]
         public ObservableCollection<Task> Tasks { get; set; }
-        public ICommand DownloadCommand { get; private set; }
+
+        [XmlIgnore] // ICommand cannot be serialized directly
+        public ICommand? DownloadCommand { get; private set; }
 
         // Parameterless constructor for XML serialization
-        public TaskList()
-        {
-            Tasks = new ObservableCollection<Task>();
-        }
+        public TaskList() { }
 
-        // Constructor with parameters
-        public TaskList(string name)
+        public TaskList(string listName)
         {
-            Name = name;
-            Tasks = new ObservableCollection<Task>();
+            Name = listName;
+            Tasks = new ObservableCollection<Task>
+            {
+                new Task("Sample Task 1", "Sample", DateTime.Now),
+                new Task("Sample Task 2", "Sample", DateTime.Now)
+            };
+            Debug.WriteLine("Show name: " + Name);
         }
 
         public void AddTask(Task task)
         {
-            if (task == null)
-            {
-                LogError("Attempted to add a null task.");
-                throw new ArgumentNullException(nameof(task), "Task cannot be null.");
-            }
-
-            if (!Tasks.Any(t => t.Name == task.Name && t.DueDateTime == task.DueDateTime))
-            {
-                Tasks.Add(task);
-            }
-            else
-            {
-                string message = $"{task.Name} already exists in the list with the same due date.";
-                LogError(message);
-                NotifyUser(message);
-            }
+            this.Add(task);
         }
 
         public void RemoveTask(Task task)
         {
-            if (!Tasks.Contains(task))
-            {
-                string message = "Task not found in the list.";
-                LogError(message);
-                throw new ArgumentException(message, nameof(task));
-            }
-            Tasks.Remove(task);
+            this.Remove(task);
         }
 
         public void UpdateTask(Task existing, Task updated)
         {
-            if (existing == null || updated == null)
-            {
-                LogError("Attempted to update a task with a null existing or updated task.");
-                throw new ArgumentNullException(nameof(existing));
-            }
-
-            var index = Tasks.IndexOf(existing);
+            var index = this.IndexOf(existing);
             if (index != -1)
             {
-                Tasks[index]
-                    .EditTask(updated.Name, updated.Description, updated.DueDateTime, updated.Priority, updated.Status)
-                    .Wait();
+                this[index].EditTask(updated.Name, updated.Description, updated.DueDateTime, updated.Priority, updated.Status).Wait();
             }
-            else
-            {
-                string message = "Task not found in the list.";
-                LogError(message);
-                NotifyUser(message);
-            }
-        }
-
-        public void Download(object parameter)
-        {
-            // Implement logic
-        }
-
-        public ObservableCollection<Task> GetTasks()
-        {
-            return Tasks;
-        }
-
-        public IEnumerator<Task> GetEnumerator()
-        {
-            return Tasks.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         private void LogError(string message)
@@ -115,6 +60,11 @@ namespace TaskManagerApp.TaskList
         private void NotifyUser(string message)
         {
             MessageBox.Show(message, "Task Management", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

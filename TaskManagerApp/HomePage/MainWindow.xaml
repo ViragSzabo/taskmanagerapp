@@ -1,38 +1,78 @@
 ﻿<Window x:Class="TaskManagerApp.HomePage.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Task Manager" Height="450" Width="600"
-        Background="#F9F9F9">
+        Title="Task Manager" Height="450" Width="800"
+        Background="#F9F9F9" FontFamily="Segoe UI">
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="30" VerticalAlignment="Center">
-            <TextBlock FontSize="24" FontWeight="Bold" Text="Task Manager" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <Button x:Name="AddListButton" Content="Add" Click="AddList_Click" 
-                    Margin="10" Width="120" Background="#007ACC" Foreground="White" 
-                    FontWeight="Bold" ToolTip="Add a new task list" />
-            <Button Content="Download" Click="DownloadAllTaskLists_Click" 
-                    Margin="10" Width="120" Background="#007ACC" Foreground="White" 
-                    FontWeight="Bold" ToolTip="Download All" />
+        <!-- Header -->
+        <TextBlock x:Name="TaskListName"
+                   FontSize="28" FontWeight="SemiBold" Margin="10" 
+                   Text="Overview" Foreground="#2C3E50" 
+                   HorizontalAlignment="Center"/>
+
+        <!-- Filters and Buttons -->
+        <StackPanel Orientation="Horizontal" Grid.Column="1" 
+                    Margin="20,10,20,10" 
+                    HorizontalAlignment="Right">
+            <!-- Filters -->
+            <StackPanel Orientation="Horizontal" 
+                        Margin="150,0,20,0">
+                <Button x:Name="AddListButton" Content="Add List" 
+                        Click="AddList_Click" Width="100" Margin="5" 
+                        Background="#3498DB" Foreground="White" 
+                        FontWeight="Bold" Padding="8,5"
+                        BorderBrush="Transparent" Cursor="Hand"/>
+                <!--<Button Content="Download" Click="DownloadAllTaskLists_Click" 
+                        Width="120" Margin="5" 
+                        Background="#3498DB" Foreground="White" 
+                        FontWeight="Bold" Padding="8,5"
+                        BorderBrush="Transparent" Cursor="Hand"/>-->
+            </StackPanel>
         </StackPanel>
 
         <!-- ListBox for displaying task lists -->
-        <StackPanel Grid.Row="1" Margin="20">
-            <TextBlock FontSize="18" FontWeight="Bold" Text="Task Lists" Margin="15,15"/>
-            <ListBox x:Name="TaskListBox" Height="200"
-                     ItemsSource="{Binding TaskManager.TaskLists}" 
-                     DisplayMemberPath="Name"
-                     SelectionChanged="TaskListBox_SelectionChanged"
-                     Background="#FFFFFF" 
-                     BorderBrush="#D3D3D3" 
-                     BorderThickness="1"
-                     SelectionMode="Single">
-            </ListBox>
-        </StackPanel>
+        <ListView x:Name="TaskListBox" 
+                  ItemsSource="{Binding ListOfListsView}"  
+                  SelectionChanged="TaskListBox_SelectionChanged"
+                  SelectionMode="Single"
+                  Margin="20,0" Grid.Row="2" 
+                  BorderBrush="#FFFFFF" BorderThickness="1"
+                  Background="White" Padding="10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn 
+                        Width="150"
+                        Header="List Name" 
+                        DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="5"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Margin" Value="5,0"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#3498DB"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#ECF0F1"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+        </ListView>
     </Grid>
 </Window>

@@ -3,20 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasklist\\tasklist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasklist\\tasklist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasksbenefits\\taskview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasksbenefits\\taskview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\homepage\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:homepage\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasksbenefits\\editdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasksbenefits\\editdialog.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\homepage\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:homepage\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasksbenefits\\editdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasksbenefits\\editdialog.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\homepage\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:homepage\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasksbenefits\\taskview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasksbenefits\\taskview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasklist\\tasklistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasklist\\tasklistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasklist\\tasklistview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasklist\\tasklistview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|c:\\users\\szabo\\onedrive\\dokumentumok\\university\\c#2\\taskmanager\\taskmanagerapp\\taskmanagerapp\\tasklist\\tasklistview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{802D22BF-4C27-40EE-AAAF-A1AC07083A3B}|TaskManagerApp.csproj|solutionrelative:tasklist\\tasklistview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,8 +37,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 466,
-          "SelectedChildIndex": 2,
+          "DockedWidth": 671,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,53 +46,100 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\HomePage\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "HomePage\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\HomePage\\MainWindow.xaml",
-              "RelativeToolTip": "HomePage\\MainWindow.xaml",
+              "DocumentIndex": 6,
+              "Title": "TaskListView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskListView.xaml.cs",
+              "RelativeDocumentMoniker": "TaskList\\TaskListView.xaml.cs",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskListView.xaml.cs",
+              "RelativeToolTip": "TaskList\\TaskListView.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T16:14:06.059Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TaskListView.xaml",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskListView.xaml",
+              "RelativeDocumentMoniker": "TaskList\\TaskListView.xaml",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskListView.xaml",
+              "RelativeToolTip": "TaskList\\TaskListView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-10-24T12:29:22.801Z",
+              "WhenOpened": "2024-10-25T19:05:43.707Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "TaskList.cs",
-              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskList.cs",
-              "RelativeDocumentMoniker": "TaskList\\TaskList.cs",
-              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskList.cs",
-              "RelativeToolTip": "TaskList\\TaskList.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAA6AAAAAAAAAA==",
+              "Title": "TaskView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\TaskView.xaml.cs",
+              "RelativeDocumentMoniker": "TasksBenefits\\TaskView.xaml.cs",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\TaskView.xaml.cs",
+              "RelativeToolTip": "TasksBenefits\\TaskView.xaml.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAmwGAAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-24T12:23:21.841Z",
+              "WhenOpened": "2024-10-28T16:10:39.206Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MainViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\HomePage\\MainViewModel.cs",
-              "RelativeDocumentMoniker": "HomePage\\MainViewModel.cs",
-              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\HomePage\\MainViewModel.cs",
-              "RelativeToolTip": "HomePage\\MainViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAABWAAAAAAAAAA==",
+              "Title": "EditDialog.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\EditDialog.xaml.cs",
+              "RelativeDocumentMoniker": "TasksBenefits\\EditDialog.xaml.cs",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\EditDialog.xaml.cs",
+              "RelativeToolTip": "TasksBenefits\\EditDialog.xaml.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAmwDMAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-24T10:42:45.062Z",
+              "WhenOpened": "2024-10-28T16:13:34.076Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\HomePage\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "HomePage\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\HomePage\\MainWindow.xaml.cs",
-              "RelativeToolTip": "HomePage\\MainWindow.xaml.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAiwDwAAAA+AAAAAAAAAA==",
+              "Title": "TaskView.xaml",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\TaskView.xaml",
+              "RelativeDocumentMoniker": "TasksBenefits\\TaskView.xaml",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\TaskView.xaml",
+              "RelativeToolTip": "TasksBenefits\\TaskView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-28T16:13:44.316Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EditDialog.xaml",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\EditDialog.xaml",
+              "RelativeDocumentMoniker": "TasksBenefits\\EditDialog.xaml",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TasksBenefits\\EditDialog.xaml",
+              "RelativeToolTip": "TasksBenefits\\EditDialog.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-28T16:13:39.484Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 108,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TaskListViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskListViewModel.cs",
+              "RelativeDocumentMoniker": "TaskList\\TaskListViewModel.cs",
+              "ToolTip": "C:\\Users\\szabo\\OneDrive\\Dokumentumok\\University\\C#2\\TaskManager\\taskmanagerapp\\TaskManagerApp\\TaskList\\TaskListViewModel.cs",
+              "RelativeToolTip": "TaskList\\TaskListViewModel.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAAABUAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-24T10:42:57.815Z",
+              "WhenOpened": "2024-10-25T18:15:09.15Z",
               "EditorCaption": ""
             }
           ]
