@@ -1,75 +1,69 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
+using System.Reflection.PortableExecutable;
 using System.Windows.Data;
+using System.Xml.Serialization;
 using TaskManagerApp.TasksBenefits;
 
 namespace TaskManagerApp.TaskList
 {
-    public class TaskListViewModel : INotifyPropertyChanged
+    public class TaskListViewModel
     {
-        private readonly ObservableCollection<Task?> _allTasks;
+        public TaskList _taskList { get; private set; }
         public ICollectionView FilteredTasksView { get; }
-        private Task? _selectedTask;
-        public Task? SelectedTask 
-        {
-            get => _selectedTask;
-            set
-            {
-                _selectedTask = value;
-                OnPropertyChanged(nameof(SelectedTask));
-            }
-        }
+        public Task? _selectedTask { get; set; }
 
-        public TaskListViewModel(TaskList taskList)
+        private Priority? _selectedPriority = Priority.All;
+        private Status? _selectedStatus = Status.All;
+
+
+        public TaskListViewModel(TaskList list, Task? selected)
         {
-            _allTasks = new ObservableCollection<Task?>(taskList.Tasks);
-            FilteredTasksView = CollectionViewSource.GetDefaultView(_allTasks);
+            _taskList = list ?? throw new ArgumentNullException(nameof(list));
+            _selectedTask = selected;
+
+            FilteredTasksView = CollectionViewSource.GetDefaultView(_taskList.tasks);
+            FilteredTasksView.Filter = FilterTasks;
+
+            _taskList.tasks.CollectionChanged += (s, e) => FilteredTasksView?.Refresh();
+            FilteredTasksView.Refresh();
         }
 
         public void AddTask(Task task)
         {
-            _allTasks.Add(task);
+            if (task == null) return;
+            _taskList.AddTask(task);
+            FilteredTasksView?.Refresh();  // 🔥 Force a refresh
         }
 
-        public void RemoveTask(Task? task)
+        public void RemoveTask(Task task)
         {
-            _allTasks.Remove(task);
+            if (task == null) throw new ArgumentNullException(nameof(task));
+            _taskList.RemoveTask(task);
+            FilteredTasksView?.Refresh(); // 🔥 Force a refresh
         }
 
         public void FilterTasksByPriority(Priority? selectedPriority)
         {
-            FilteredTasksView.Filter = task =>
-            {
-                var currentTask = task as Task;
-                if (selectedPriority is null or Priority.All)
-                {
-                    return true;
-                }
-                return currentTask.Priority == selectedPriority;
-            };
-            FilteredTasksView.Refresh();
+            _selectedPriority = selectedPriority;
+            FilteredTasksView.Refresh(); // 🔥 Force a refresh
         }
 
         public void FilterTasksByStatus(Status? selectedStatus)
         {
-            FilteredTasksView.Filter = task =>
-            {
-                var currentTask = task as Task;
-                if (selectedStatus is null or Status.All)
-                {
-                    return true;
-                }
-                return currentTask.Status == selectedStatus;
-            };
-            FilteredTasksView.Refresh();
+            _selectedStatus = selectedStatus;
+            FilteredTasksView.Refresh(); // 🔥 Force a refresh
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+        private bool FilterTasks(object obj)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (obj is not Task task) return false;
+
+            bool matchesPriority = _selectedPriority == Priority.All || task.Priority == _selectedPriority;
+            bool matchesStatus = _selectedStatus == Status.All || task.Status == _selectedStatus;
+
+            return matchesPriority && matchesStatus;
         }
     }
 }

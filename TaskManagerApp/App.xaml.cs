@@ -7,13 +7,11 @@ namespace TaskManagerApp
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
-            // Create and show MainWindow
+            // Create the startup (base.OnStartup(e))
             MainWindow mainWindow = new MainWindow();
 
             // Set the DataContext to a new instance of MainViewModel
-            mainWindow.DataContext = new MainViewModel();
+            mainWindow.DataContext = new MainWindow();
 
             // Show the main window
             mainWindow.Show();

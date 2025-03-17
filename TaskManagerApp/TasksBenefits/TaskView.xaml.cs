@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows;
-using TaskManagerApp.TasksBenefits;
 
-namespace TaskManagerApp
+namespace TaskManagerApp.TasksBenefits
 {
     public partial class TaskView : Window
     {
@@ -16,7 +15,7 @@ namespace TaskManagerApp
             DataContext = this;
         }
 
-        private void MarkAsCompleteButton_Click(object sender, RoutedEventArgs e)
+        public void MarkAsCompleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedTask.Status != Status.Completed)
             {
@@ -45,12 +44,12 @@ namespace TaskManagerApp
             }
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        public void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void TaskListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        public void TaskListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             // Get the selected task from the ListBox
             if (TaskListBox.SelectedItem is Task selectedTask)
@@ -61,7 +60,7 @@ namespace TaskManagerApp
             }
         }
 
-        private async void EditTaskButton_Click(object sender, RoutedEventArgs e)
+        public void EditTaskButton_Click(object sender, RoutedEventArgs e)
         {
             EditDialog editDialog = new EditDialog
             {
@@ -74,7 +73,7 @@ namespace TaskManagerApp
             {
                 try
                 {
-                    await SelectedTask.EditTask(
+                    SelectedTask.EditTask(
                         editDialog.Task.Name,
                         editDialog.Task.Description,
                         editDialog.Task.DueDateTime,
@@ -92,7 +91,7 @@ namespace TaskManagerApp
             }
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        public void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close(); // Just close without saving
         }

@@ -3,56 +3,53 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using TaskManagerApp.HomePage;
 using TaskManagerApp.TasksBenefits;
 
 namespace TaskManagerApp.TaskList
 {
-    public partial class TaskListView : Window
+    public partial class TaskListView
     {
         public TaskListViewModel ViewModel { get; set; }
+        public TaskList SelectedTaskList { get; set; }
 
-        public TaskManagerApp.TaskList.TaskList SelectedTaskList { get; set;  }
-
-        public TaskListView(TaskManagerApp.TaskList.TaskList taskList)
+        public TaskListView(TaskListViewModel viewModel)
         {
             InitializeComponent();
-            ViewModel = new TaskListViewModel(taskList);
-            DataContext = ViewModel;
-            SelectedTaskList = taskList;
+            ViewModel = viewModel;
+            SelectedTaskList = viewModel._taskList;
             this.Closed += TaskListView_Closed;
         }
 
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            var addTaskWindow = new AddTaskWindow(); 
-            if (addTaskWindow.ShowDialog() == true) 
             {
-                try
+                var addTaskWindow = new AddTaskWindow();
+                if (addTaskWindow.ShowDialog() == true)
                 {
-                    var newTask = addTaskWindow.TaskToEdit; 
-                    ViewModel.AddTask(newTask);
-                }
-                catch (ValidationException ex)
-                {
-                    ShowErrorMessage(ex.Message); 
-                    LogError(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    ShowErrorMessage("An unexpected error occurred while adding the task.");
-                    LogError(ex.Message);
+                    try
+                    {
+                        var newTask = addTaskWindow.TaskToEdit;
+                        ViewModel.AddTask(newTask);
+                    }
+                    catch (ValidationException ex)
+                    {
+                        ShowErrorMessage(ex.Message);
+                        LogError(ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowErrorMessage("An unexpected error occurred while adding the task.");
+                        LogError(ex.Message);
+                    }
                 }
             }
         }
 
         private void RemoveTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.SelectedTask != null 
-                && ShowConfirmationDialog("Are you sure you want to remove this task?"))
+            if (ShowConfirmationDialog("Are you sure you want to remove this task?"))
             {
-                ViewModel.RemoveTask(ViewModel.SelectedTask);
+                ViewModel.RemoveTask(ViewModel._selectedTask);
             }
             else
             {
@@ -65,9 +62,9 @@ namespace TaskManagerApp.TaskList
         private void PriorityFilterComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (PriorityFilterComboBox.SelectedItem is not ComboBoxItem selectedItem) return;
-            var selectedPriority = 
+            var selectedPriority =
                 (Priority?)Enum.Parse(typeof(Priority),
-                selectedItem.Tag.ToString() 
+                selectedItem.Tag.ToString()
                 ?? throw new InvalidOperationException());
             ViewModel.FilterTasksByPriority(selectedPriority);
         }
@@ -75,31 +72,27 @@ namespace TaskManagerApp.TaskList
         private void StatusFilterComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (StatusFilterComboBox.SelectedItem is not ComboBoxItem selectedItem) return;
-            var selectedStatus = 
+            var selectedStatus =
                 (Status?)Enum.Parse(typeof(Status),
-                    selectedItem.Tag.ToString() 
+                    selectedItem.Tag.ToString()
                     ?? throw new InvalidOperationException());
             ViewModel.FilterTasksByStatus(selectedStatus);
         }
 
-        private void TasksListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void TasksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TasksListView.SelectedItem is Task selectedTask)
             {
-                ViewModel.SelectedTask = selectedTask;
-                SelectedTaskDetails.Text = $"Selected Task: {selectedTask.Name} is {selectedTask.Status}";
+                SelectedTaskDetails.Text = $"Selected Task: {selectedTask.Name} (Status: {selectedTask.Status})";
 
+                // Open TaskView and handle completion
                 var taskView = new TaskView(selectedTask);
-                taskView.TaskCompleted += (completedTask) =>
-                {
-                    ViewModel.RemoveTask(completedTask);
-                };
-                taskView.ShowDialog(); 
+                taskView.TaskCompleted += (completedTask) => ViewModel.RemoveTask(completedTask);
+                taskView.ShowDialog();
             }
             else
             {
-                ViewModel.SelectedTask = null;
-                SelectedTaskDetails.Text = "No task has been selected.";
+                SelectedTaskDetails.Text = "No task selected.";
             }
         }
 
@@ -121,6 +114,7 @@ namespace TaskManagerApp.TaskList
 
         private void GoBackButton_Click(object sender, RoutedEventArgs e)
         {
+
             this.Close();
         }
 

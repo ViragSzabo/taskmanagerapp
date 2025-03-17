@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Windows;
 using TaskManagerApp.TasksBenefits;
 
-namespace TaskManagerApp
+namespace TaskManagerApp.TaskList
 {
     /// <summary>
     /// Interaction logic for AddTaskWindow.xaml
@@ -18,6 +19,7 @@ namespace TaskManagerApp
             // Populate Priority and Status ComboBoxes
             PriorityComboBox.ItemsSource = Enum.GetValues(typeof(Priority));
             StatusComboBox.ItemsSource = Enum.GetValues(typeof(Status));
+            TaskToEdit = new Task("Unknown", "Not Given", DateAndTime.Now);
         }
 
         // Constructor for editing an existing task

@@ -14,141 +14,150 @@ namespace TaskManagerApp.HomePage
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<TaskList.TaskList> ListOfLists { get; set; }
-        public ICollectionView ListOfListsView { get; }
-        private const string FilePath = "TaskLists.xml";
-
-        public MainViewModel()
-        {
-            // Initialize ListOfLists to avoid null reference
-            ListOfLists = new ObservableCollection<TaskList.TaskList>
-            {
-                new TaskList.TaskList("Default Task List 1"),
-                new TaskList.TaskList("Default Task List 2")
-            };
-
-            // Load task lists from file at startup
-            //LoadTaskListsFromFile(FilePath).ConfigureAwait(false); // Load asynchronously
-
-            if (!ListOfLists.Any())
-            {
-                InitializeDefaultTaskLists();
-            }
-
-            ListOfListsView = CollectionViewSource.GetDefaultView(ListOfLists);
-            Debug.WriteLine("Task Manager's list count: " + ListOfLists.Count);
-            Debug.WriteLine("First element: " + ListOfLists[0]);
-        }
+        public ObservableCollection<TaskList.TaskList> ListOfLists {  get; set; }
+        public ICollectionView ListOfListsView { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
+        protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private static readonly string DownloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+        private static readonly string FileName = "TaskLists.xml";
+        private readonly string FilePath = Path.Combine(DownloadsPath, FileName);
+
+        public MainViewModel()
+        {
+            ListOfLists = new ObservableCollection<TaskList.TaskList>()
+            {
+                new TaskList.TaskList("Item1"), new TaskList.TaskList("Item2"), new TaskList.TaskList("Item3")
+            };
+            ListOfListsView = CollectionViewSource.GetDefaultView(ListOfLists);
+            LoadDataAsync().ConfigureAwait(false);
+        }
+
+        private async Task LoadDataAsync()
+        {
+            if (File.Exists(FilePath))
+            {
+                var loadedLists = await LoadFromFileAsync<List<TaskList.TaskList>>(FilePath);
+                if (loadedLists != null)
+                {
+                    foreach (var list in loadedLists)
+                    {
+                        ListOfLists.Add(list);
+                    }
+                    ListOfListsView.Refresh(); // Refresh the collection view
+                }
+            }
+            else
+            {
+                InitializeDefaultTaskLists();
+                await SaveToFileAsync(ListOfLists, FilePath);
+            }
+
+            Debug.WriteLine($"Loaded task lists: {ListOfLists.Count}"); // Check if lists are loaded correctly
         }
 
         public void AddTaskList(string listName)
         {
-                ListOfLists.Add(new TaskList.TaskList(listName));
-                OnPropertyChanged(nameof(ListOfLists)); // Notify the UI about the update
-                ListOfListsView.Refresh(); // Force refresh
-        }
-
-
-        private void InitializeDefaultTaskLists()
-        {
-            if (!ListOfLists.Any()) // Only add if there are no lists
+            if (!string.IsNullOrWhiteSpace(listName))
             {
-                // Create default task lists
-                var personalList = new TaskList.TaskList("Personal");
-                personalList.Tasks.Add(new TasksBenefits.Task("Grocery Shopping", "Buy groceries for the week.", new DateTime(2024, 10, 30)));
-                personalList.Tasks.Add(new TasksBenefits.Task("Exercise", "Go for a run in the evening.", new DateTime(2024, 10, 30)));
+                var newList = new TaskList.TaskList(listName);
+                ListOfLists.Add(newList);
+                OnPropertyChanged(nameof(ListOfLists)); 
+                OnPropertyChanged(nameof(ListOfLists.Count));
 
-                var workList = new TaskList.TaskList("Work");
-                workList.Tasks.Add(new TasksBenefits.Task("Project Meeting", "Prepare for the project meeting on Friday.", new DateTime(2024, 10, 30)));
-                workList.Tasks.Add(new TasksBenefits.Task("Submit Report", "Finalize and submit the monthly report.", new DateTime(2024, 10, 30)));
+                ListOfListsView.Refresh();
 
-                var studyList = new TaskList.TaskList("Study");
-                studyList.Tasks.Add(new TasksBenefits.Task("Finish Assignment", "Complete the programming assignment by Wednesday.", new DateTime(2024, 10, 30)));
-                studyList.Tasks.Add
-                (new TasksBenefits.Task("Review Lecture Notes",
-                    "Go through notes from the last lecture.",
-                    new DateTime(2024, 10, 30)));
-
-                // Add lists to TaskManager
-                ListOfLists.Add(personalList);
-                ListOfLists.Add(workList);
-                ListOfLists.Add(studyList);
+                Console.WriteLine($"Task list added: {newList.Name}"); // Debug line
             }
         }
 
-        public void RemoveTaskList(TaskList.TaskList taskList)
+        public void InitializeDefaultTaskLists()
         {
-            if (ListOfLists.Contains(taskList))
+                ListOfLists.Add(CreateTaskList("Personal", new[]
             {
-                ListOfLists.Remove(taskList);
+                new TasksBenefits.Task("Grocery Shopping", "Buy groceries for the week.", DateTime.Today),
+                new TasksBenefits.Task("Exercise", "Go for a run in the evening.", DateTime.Today)
+            }));
+
+            ListOfLists.Add(CreateTaskList("Work", new[]
+            {
+                new TasksBenefits.Task("Project Meeting", "Prepare for the project meeting on Friday.", DateTime.Today),
+                new TasksBenefits.Task("Submit Report", "Finalize and submit the monthly report.", DateTime.Today)
+            }));
+
+            ListOfLists.Add(CreateTaskList("Study", new[]
+            {
+                new TasksBenefits.Task("Finish Assignment", "Complete the programming assignment by Wednesday.", DateTime.Today),
+                new TasksBenefits.Task("Review Lecture Notes", "Go through notes from the last lecture.", DateTime.Today)
+            }));
+        }
+
+        public static TaskList.TaskList CreateTaskList(string listName, TasksBenefits.Task[] tasks)
+        {
+            var taskList = new TaskList.TaskList(listName);
+            foreach (var task in tasks)
+            {
+                taskList.AddTask(task);
             }
+            return taskList;
         }
 
-        public void AddTaskList(TaskList.TaskList taskList)
-        {
-            ListOfLists.Add(taskList); // Add the new task list to the collection
-            Debug.WriteLine("Add to Task Manager: " + taskList);
-        }
-
-        public List<TaskList.TaskList> GetSerializableTaskLists()
-        {
-            return new List<TaskList.TaskList>(ListOfLists); // Return a list for serialization
-        }
-
-        public async Task SaveAllTaskLists()
+        public static async Task SaveToFileAsync<T>(T data, string filePath)
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<TaskList.TaskList>));
-                using StreamWriter writer = new StreamWriter(FilePath);
-                var taskLists = GetSerializableTaskLists();
-                await Task.Run(() => serializer.Serialize(writer, taskLists));
+                var serializer = new XmlSerializer(typeof(T));
+                using var writer = new StreamWriter(filePath);
+                await Task.Run(() => serializer.Serialize(writer, data));
+                Debug.WriteLine("Data saved successfully.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error saving task lists: {ex.Message}");
-                MessageBox.Show("Failed to save task lists. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Debug.WriteLine($"Error saving file: {ex.Message}");
             }
         }
 
-        public async Task LoadTaskListsFromFile(string filePath)
+        public static async Task<T?> LoadFromFileAsync<T>(string filePath) where T : class
+        {
+            if (!File.Exists(filePath)) return null;
+
+            try
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                using var reader = new StreamReader(filePath);
+                return await Task.Run(() => serializer.Deserialize(reader) as T);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine($"Error deserializing file: {ex.Message} ",filePath);
+                MessageBox.Show($"Error deserializing file: {ex.Message}", "Deserialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"General error loading file: {ex.Message}");
+                MessageBox.Show($"Error loading file: {ex.Message}", "File Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        // Saving all task lists to XML file
+        public async Task SaveAllTaskLists(string filePath)
         {
             try
             {
-                if (File.Exists(filePath))
+                var serializer = new XmlSerializer(typeof(MainViewModel)); // List of TaskList
+                using (var writer = new StreamWriter(filePath))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<TaskList.TaskList>));
-                    using StreamReader reader = new StreamReader(filePath);
-                    var taskLists = (List<TaskList.TaskList>)serializer.Deserialize(reader)!;
-
-                    if (taskLists.Any())
-                    {
-                        ListOfLists.Clear(); // Clear existing lists
-                        LoadFromSerializableTaskLists(taskLists); // Load data into ListOfLists
-                    }
+                    await Task.Run(() => serializer.Serialize(writer, this)); // Serialize and write to file
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error loading task lists: {ex.Message}");
-                MessageBox.Show("Failed to load task lists. Please check the file and try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void LoadFromSerializableTaskLists(List<TaskList.TaskList> taskLists)
-        {
-            // Clear existing items in ListOfLists
-            //ListOfLists.Clear();
-            foreach (var taskList in taskLists)
-            {
-                // Add each loaded task list to the ObservableCollection
-                ListOfLists.Add(taskList); 
+                MessageBox.Show($"An error occurred while saving task lists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

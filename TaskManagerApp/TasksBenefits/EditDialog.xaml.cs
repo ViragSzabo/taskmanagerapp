@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
-using TaskManagerApp.TasksBenefits;
-using Task = TaskManagerApp.TasksBenefits.Task;
 
-namespace TaskManagerApp
+namespace TaskManagerApp.TasksBenefits
 {
     public partial class EditDialog : Window
     {
@@ -19,10 +16,10 @@ namespace TaskManagerApp
         private void LoadComboBoxes()
         {
             // Populate the Priority ComboBox
-            PriorityComboBox.ItemsSource = Enum.GetValues(typeof(Priority)); 
+            PriorityComboBox.ItemsSource = Enum.GetValues(typeof(Priority));
 
             // Populate the Status ComboBox
-            StatusComboBox.ItemsSource = Enum.GetValues(typeof(Status)); 
+            StatusComboBox.ItemsSource = Enum.GetValues(typeof(Status));
         }
 
         public void LoadTaskDetails(Task task)
@@ -33,8 +30,8 @@ namespace TaskManagerApp
             TaskNameTextBox.Text = Task.Name;
             TaskDescriptionTextBox.Text = Task.Description;
             TaskDueDatePicker.SelectedDate = Task.DueDateTime;
-            PriorityComboBox.SelectedItem = Task.Priority; 
-            StatusComboBox.SelectedItem = Task.Status; 
+            PriorityComboBox.SelectedItem = Task.Priority;
+            StatusComboBox.SelectedItem = Task.Status;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -47,10 +44,10 @@ namespace TaskManagerApp
             Task.DueDateTime = TaskDueDatePicker.SelectedDate ?? DateTime.Now;
 
             // Map selected priority
-            Task.Priority = (Priority)PriorityComboBox.SelectedItem; 
+            Task.Priority = (Priority)PriorityComboBox.SelectedItem;
 
             // Map selected status
-            Task.Status = (Status)StatusComboBox.SelectedItem; 
+            Task.Status = (Status)StatusComboBox.SelectedItem;
 
             DialogResult = true;
             Close();

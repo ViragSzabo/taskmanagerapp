@@ -1,16 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 
 namespace TaskManagerApp.TasksBenefits
 {
-    [Serializable] // To be compatible with XML serialization
-    public class Task : INotifyPropertyChanged
+    // To be compatible with XML serialization
+    [Serializable]
+    [XmlType("Task")]
+    public class Task
     {
+
+        [XmlElement("ID")]
+        public string Id { get; set; }
+
         [XmlElement("Title")]
         public string Name { get; set; }
 
@@ -20,7 +22,10 @@ namespace TaskManagerApp.TasksBenefits
         [XmlElement("DueDate")]
         public DateTime DueDateTime { get; set; }
 
+        [XmlElement("Priority")]
         public Priority Priority { get; set; }
+
+        [XmlElement("Status")]
         public Status Status { get; set; }
 
         // Change the property to have a public setter
@@ -30,19 +35,19 @@ namespace TaskManagerApp.TasksBenefits
         [XmlElement("LastUpdatedDateTime")]
         public DateTime? LastUpdatedDateTime { get; set; }
 
+        public Task() { }
+
         // Constructor with parameters
         public Task(string name, string description, DateTime dueDateTime)
         {
+            this.Id = Guid.NewGuid().ToString();
             Name = name;
             Description = description;
             DueDateTime = dueDateTime;
             Priority = Priority.Medium;
             Status = Status.InProgress;
-            CreatedDateTime = DateTime.Now; // Initialize in the constructor
+            CreatedDateTime = DateTime.Now;
         }
-
-        // Parameterless constructor required for serialization
-        public Task() { }
 
         // Mark the task as complete
         public void MarkAsComplete()
@@ -51,52 +56,24 @@ namespace TaskManagerApp.TasksBenefits
         }
 
         // Edit the task asynchronously
-        public async System.Threading.Tasks.Task EditTask(
+        public void EditTask(
             string updatedName,
             string updatedDescription,
             DateTime? updatedDueDateTime,
             Priority updatedPriority,
             Status updatedStatus)
         {
-            await System.Threading.Tasks.Task.Run(() =>
+            Name = updatedName;
+            Description = updatedDescription;
+
+            if (updatedDueDateTime.HasValue)
             {
-                // Simulate work
-                System.Threading.Tasks.Task.Delay(1000).Wait();
-                Name = updatedName;
-                Description = updatedDescription;
+                DueDateTime = updatedDueDateTime.Value;
+            }
 
-                if (updatedDueDateTime.HasValue)
-                {
-                    DueDateTime = updatedDueDateTime.Value;
-                }
-
-                Priority = updatedPriority;
-                Status = updatedStatus;
-                LastUpdatedDateTime = DateTime.Now; // Update last modified date
-            });
-
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Description));
-            OnPropertyChanged(nameof(DueDateTime));
-            OnPropertyChanged(nameof(Priority));
-            OnPropertyChanged(nameof(Status));
-            OnPropertyChanged(nameof(LastUpdatedDateTime));
-        }
-
-        // Property change event
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
+            Priority = updatedPriority;
+            Status = updatedStatus;
+            LastUpdatedDateTime = DateTime.Now;
         }
 
         // Optional method: Get display name for priority enum

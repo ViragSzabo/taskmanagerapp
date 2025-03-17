@@ -1,70 +1,95 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
+using System.Reflection.PortableExecutable;
 using System.Xml.Serialization;
 using TaskManagerApp.TasksBenefits;
 
 namespace TaskManagerApp.TaskList
 {
-    [XmlRoot("TaskList")]
-    public class TaskList : ObservableCollection<Task>
+    [Serializable]
+    [XmlType("TaskList")]
+    public class TaskList : INotifyPropertyChanged
     {
-        [XmlAttribute("Name")]
-        public string Name { get; set; }
-        public ObservableCollection<Task> Tasks { get; set; }
 
-        [XmlIgnore] // ICommand cannot be serialized directly
-        public ICommand? DownloadCommand { get; private set; }
+        [XmlArray("Tasks")]
+        [XmlArrayItem("Task")]
+        public List<Task> TasksList { get; set; }
 
-        // Parameterless constructor for XML serialization
-        public TaskList() { }
+
+        public ObservableCollection<Task> tasks { get; set; }
+
+        private string _name;
+
+        [XmlElement("Name")]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
+
+        [XmlElement("SizeOfTheList")]
+        public int SizeOfTheList => tasks.Count;
+
+        // Make PropertyChanged public
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public TaskList(string listName)
         {
             Name = listName;
-            Tasks = new ObservableCollection<Task>
-            {
-                new Task("Sample Task 1", "Sample", DateTime.Now),
-                new Task("Sample Task 2", "Sample", DateTime.Now)
-            };
-            Debug.WriteLine("Show name: " + Name);
+            tasks = new ObservableCollection<Task>();
+        }
+
+        public TaskList()
+        {
+            Name = "Unknown";
+            tasks = new ObservableCollection<Task>();
         }
 
         public void AddTask(Task task)
         {
-            this.Add(task);
+            if (task == null) throw new ArgumentNullException(nameof(task));
+            tasks.Add(task);
+            OnPropertyChanged(nameof(SizeOfTheList)); // Notify that SizeOfTheList has changed
         }
 
         public void RemoveTask(Task task)
         {
-            this.Remove(task);
+            if (task == null) throw new ArgumentNullException(nameof(task));
+            tasks.Remove(task);
+            OnPropertyChanged(nameof(SizeOfTheList)); // Notify that SizeOfTheList has changed
         }
 
-        public void UpdateTask(Task existing, Task updated)
+        public void UpdateTask(Task specificTask)
         {
-            var index = this.IndexOf(existing);
-            if (index != -1)
+            var existingTask = this.tasks.FirstOrDefault(t => t.Id == specificTask.Id);
+            if (existingTask != null)
             {
-                this[index].EditTask(updated.Name, updated.Description, updated.DueDateTime, updated.Priority, updated.Status).Wait();
+                existingTask.EditTask(
+                    specificTask.Name,
+                    specificTask.Description,
+                    specificTask.DueDateTime,
+                    specificTask.Priority,
+                    specificTask.Status);
+
+                OnPropertyChanged(nameof(SizeOfTheList));
             }
         }
 
-        private void LogError(string message)
+        public override string? ToString()
         {
-            Console.WriteLine($"ERROR: {message}");
-        }
-
-        private void NotifyUser(string message)
-        {
-            MessageBox.Show(message, "Task Management", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-
-        public override string ToString()
-        {
-            return Name;
+            return this.Name;
         }
     }
 }
