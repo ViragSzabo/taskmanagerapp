@@ -72,20 +72,20 @@
         <ListView x:Name="TasksListView" ItemsSource="{Binding FilteredTasksView}" 
                   SelectedItem="{Binding SelectedTask}" 
                   Margin="20,0" Grid.Row="2" SelectionChanged="TasksListView_SelectionChanged"
-                  BorderBrush="#BDC3C7" BorderThickness="1" Background="White" Padding="10">
+                  BorderBrush="#BDC3C7" BorderThickness="1" Background="White" Padding="5">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Task Name" DisplayMemberBinding="{Binding Name}" Width="150"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
-                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDate}" Width="150"/>
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="100"/>
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="250"/>
+                    <GridViewColumn Header="Due Date" DisplayMemberBinding="{Binding DueDateTime}" Width="200"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="50"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="75"/>
                 </GridView>
             </ListView.View>
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Padding" Value="5"/>
-                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontSize" Value="12"/>
                     <Setter Property="Background" Value="White"/>
                     <Setter Property="Margin" Value="5,0"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>

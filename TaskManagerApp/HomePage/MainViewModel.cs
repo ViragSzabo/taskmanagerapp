@@ -14,7 +14,20 @@ namespace TaskManagerApp.HomePage
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<TaskList.TaskList> ListOfLists {  get; set; }
+        public ObservableCollection<TaskList.TaskList> ListOfLists { get; set; }
+        public ObservableCollection<TasksBenefits.Task> HighPriorityTasks { get; set; }
+
+        public TasksBenefits.Task? _selectedHighPriorityTask;
+        public TasksBenefits.Task? SelectedHighPriorityTask
+        {
+            get => _selectedHighPriorityTask;
+            set
+            {
+                _selectedHighPriorityTask = value;
+                OnPropertyChanged(nameof(SelectedHighPriorityTask));
+            }
+        }
+
         public ICollectionView ListOfListsView { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -28,55 +41,114 @@ namespace TaskManagerApp.HomePage
 
         public MainViewModel()
         {
-            ListOfLists = new ObservableCollection<TaskList.TaskList>()
-            {
-                new TaskList.TaskList("Item1"), new TaskList.TaskList("Item2"), new TaskList.TaskList("Item3")
-            };
+            ListOfLists = new ObservableCollection<TaskList.TaskList>();
+            HighPriorityTasks = new ObservableCollection<TasksBenefits.Task>();
+
             ListOfListsView = CollectionViewSource.GetDefaultView(ListOfLists);
-            LoadDataAsync().ConfigureAwait(false);
+            InitializeDefaultTaskLists();
+
+            _ = Task.Run(() => LoadDataAsync());
         }
 
-        private async Task LoadDataAsync()
+        public void UpdateHighPriorityTasks()
         {
-            if (File.Exists(FilePath))
+            HighPriorityTasks.Clear();
+
+            foreach (var taskList in ListOfLists)
             {
-                var loadedLists = await LoadFromFileAsync<List<TaskList.TaskList>>(FilePath);
-                if (loadedLists != null)
+                foreach (var task in taskList.Tasks.Where(t => t.Priority == TasksBenefits.Priority.High))
                 {
-                    foreach (var list in loadedLists)
+                    HighPriorityTasks.Add(task);
+
+                    if (task.Status == TasksBenefits.Status.Completed)
                     {
-                        ListOfLists.Add(list);
+                        HighPriorityTasks.Remove(task);
                     }
-                    ListOfListsView.Refresh(); // Refresh the collection view
                 }
             }
-            else
+            OnPropertyChanged(nameof(HighPriorityTasks));
+        }
+
+        public async void LoadDataAsync()
+        {
+            try
             {
-                InitializeDefaultTaskLists();
-                await SaveToFileAsync(ListOfLists, FilePath);
+                if (File.Exists(FilePath))
+                {
+                    var loadedLists = LoadTaskListsFromFile(FilePath);
+                    if (loadedLists != null)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            UpdateListView(loadedLists);
+                            UpdateHighPriorityTasks();
+                        });
+                    }
+                }
+                else
+                {
+                    InitializeDefaultTaskLists();
+                    await SaveToFileAsync(ListOfLists, FilePath);
+                    Debug.WriteLine("Initialized default task lists and saved to file.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading task lists: {ex.Message}");
+                MessageBox.Show($"An error occurred while loading task lists: {ex.Message}", "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            Debug.WriteLine($"Loaded task lists: {ListOfLists.Count}"); // Check if lists are loaded correctly
+            Debug.WriteLine($"Loaded task lists: {ListOfLists.Count}");
+        }
+
+        public static List<TaskList.TaskList>? LoadTaskListsFromFile(string filePath)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(List<TaskList.TaskList>));
+                using var reader = new StreamReader(filePath);
+                return (List<TaskList.TaskList>?)serializer.Deserialize(reader);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading task lists from file: {ex.Message}");
+                MessageBox.Show($"An error occurred while loading task lists from file: {ex.Message}", "File Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        public void UpdateListView(List<TaskList.TaskList> loadedLists)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ListOfLists.Clear();
+                foreach (var list in loadedLists)
+                {
+                    ListOfLists.Add(list);
+                    UpdateHighPriorityTasks();
+                    Debug.WriteLine($"Successfully loaded {list.Tasks.Count} tasks.");
+                }
+                ListOfListsView.Refresh();
+            });
         }
 
         public void AddTaskList(string listName)
         {
-            if (!string.IsNullOrWhiteSpace(listName))
+            Application.Current.Dispatcher.Invoke(() =>
             {
                 var newList = new TaskList.TaskList(listName);
                 ListOfLists.Add(newList);
-                OnPropertyChanged(nameof(ListOfLists)); 
-                OnPropertyChanged(nameof(ListOfLists.Count));
-
+                UpdateHighPriorityTasks();
                 ListOfListsView.Refresh();
+                _ = SaveOnExist();
 
-                Console.WriteLine($"Task list added: {newList.Name}"); // Debug line
-            }
+                Console.WriteLine($"Task list added: {newList.Name}");
+            });
         }
 
         public void InitializeDefaultTaskLists()
         {
-                ListOfLists.Add(CreateTaskList("Personal", new[]
+            ListOfLists.Add(CreateTaskList("Personal", new[]
             {
                 new TasksBenefits.Task("Grocery Shopping", "Buy groceries for the week.", DateTime.Today),
                 new TasksBenefits.Task("Exercise", "Go for a run in the evening.", DateTime.Today)
@@ -105,21 +177,6 @@ namespace TaskManagerApp.HomePage
             return taskList;
         }
 
-        public static async Task SaveToFileAsync<T>(T data, string filePath)
-        {
-            try
-            {
-                var serializer = new XmlSerializer(typeof(T));
-                using var writer = new StreamWriter(filePath);
-                await Task.Run(() => serializer.Serialize(writer, data));
-                Debug.WriteLine("Data saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error saving file: {ex.Message}");
-            }
-        }
-
         public static async Task<T?> LoadFromFileAsync<T>(string filePath) where T : class
         {
             if (!File.Exists(filePath)) return null;
@@ -128,11 +185,13 @@ namespace TaskManagerApp.HomePage
             {
                 var serializer = new XmlSerializer(typeof(T));
                 using var reader = new StreamReader(filePath);
+                var xmlContent = await reader.ReadToEndAsync();
+                Debug.WriteLine($"XML Content:\n{xmlContent}");
                 return await Task.Run(() => serializer.Deserialize(reader) as T);
             }
             catch (InvalidOperationException ex)
             {
-                Debug.WriteLine($"Error deserializing file: {ex.Message} ",filePath);
+                Debug.WriteLine($"Error deserializing file: {ex.Message} ", filePath);
                 MessageBox.Show($"Error deserializing file: {ex.Message}", "Deserialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
@@ -144,21 +203,41 @@ namespace TaskManagerApp.HomePage
             }
         }
 
-        // Saving all task lists to XML file
-        public async Task SaveAllTaskLists(string filePath)
+        public static async Task SaveToFileAsync<T>(T data, string filePath)
         {
             try
             {
-                var serializer = new XmlSerializer(typeof(MainViewModel)); // List of TaskList
-                using (var writer = new StreamWriter(filePath))
+                var serializer = new XmlSerializer(typeof(T));
+                using var writer = new StreamWriter(filePath);
+                await Task.Run(() => serializer.Serialize(writer, data));
+                Debug.WriteLine("Tasklists and tasks saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving file: {ex.Message}");
+            }
+        }
+
+        public async Task SaveAllTaskLists()
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(ObservableCollection<TaskList.TaskList>));
+                using (var writer = new StreamWriter(FilePath))
                 {
-                    await Task.Run(() => serializer.Serialize(writer, this)); // Serialize and write to file
+                    await Task.Run(() => serializer.Serialize(writer, ListOfLists));
                 }
+                Debug.WriteLine("Task lists saved successfully.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while saving task lists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public async Task? SaveOnExist()
+        {
+            await SaveToFileAsync(ListOfLists, FilePath);
         }
     }
 }

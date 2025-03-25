@@ -8,12 +8,12 @@ C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\T
 TaskManagerApp
 none
 false
-TRACE;DEBUG;NET;NET7_0;NETCOREAPP
+TRACE;DEBUG;NET;NET7_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\szabo\OneDrive\Dokumentumok\University\C#2\TaskManager\taskmanagerapp\TaskManagerApp\App.xaml
 6539016283
 
 221183060403
-198-1133866272
+204-1014938998
 HomePage\ListInputDialog.xaml;HomePage\MainWindow.xaml;TaskList\AddTaskWindow.xaml;TaskList\TaskListView.xaml;TasksBenefits\EditDialog.xaml;TasksBenefits\TaskView.xaml;
 
 False

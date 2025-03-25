@@ -92,7 +92,7 @@ namespace TaskManagerApp.TasksBenefits {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/TaskManagerApp;V1.0.0.0;component/tasksbenefits/editdialog.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/TaskManagerApp;component/tasksbenefits/editdialog.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\TasksBenefits\EditDialog.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

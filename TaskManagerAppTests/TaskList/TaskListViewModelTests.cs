@@ -36,7 +36,7 @@ namespace TaskManagerAppTests.TaskList
             _viewModel.AddTask(_task);
             _viewModel.AddTask(_task2);
 
-            Assert.AreEqual(2, _viewModel._taskList.SizeOfTheList);
+            Assert.AreEqual(2, _viewModel.Tasks.Count);
             Assert.IsTrue(_viewModel.FilteredTasksView.Cast<Task>().Any(t => t.Name == "Test Task"));
             Assert.IsTrue(_viewModel.FilteredTasksView.Cast<Task>().Any(t => t.Name == "Blaa"));
         }
@@ -47,7 +47,7 @@ namespace TaskManagerAppTests.TaskList
             _viewModel.AddTask(_task2);
             _viewModel.RemoveTask(_task2);
 
-            Assert.AreEqual(0, _viewModel._taskList.SizeOfTheList);
+            Assert.AreEqual(0, _viewModel.Tasks.Count);
             Assert.IsFalse(_viewModel.FilteredTasksView.Cast<Task>().Any(t => t.Name == "Blaa"));
         }
 
@@ -60,11 +60,13 @@ namespace TaskManagerAppTests.TaskList
             _task.EditTask("Task 1", "Description", DateTime.Now, Priority.Low, Status.Pending);
             _task2.EditTask("Task 2", "Description", DateTime.Now, Priority.High, Status.Completed);
 
-            _viewModel._taskList.UpdateTask(_task);
-            _viewModel._taskList.UpdateTask(_task2);
+            // Use ViewModel's TaskList to update the task.
+            _viewModel.TaskList.UpdateTask(_task);
+            _viewModel.TaskList.UpdateTask(_task2);
+            _taskList.UpdateTask(_task);
 
             _viewModel.FilterTasksByPriority(Priority.High);
-            _viewModel.FilteredTasksView.Refresh(); // 🔥 Force refresh manually
+            _viewModel.FilteredTasksView.Refresh();  // 🔥 Force refresh manually
 
             var filteredTasks = _viewModel.FilteredTasksView.Cast<Task>().ToList();
             Assert.AreEqual(1, filteredTasks.Count());
@@ -78,7 +80,7 @@ namespace TaskManagerAppTests.TaskList
 
             _task.EditTask("Test", "Show Testing", DateTime.Now, Priority.Medium, Status.InProgress);
 
-            _viewModel._taskList.UpdateTask(_task);
+            _viewModel.TaskList.UpdateTask(_task);
 
             _viewModel.FilterTasksByStatus(Status.InProgress);
             _viewModel.FilteredTasksView.Refresh();  // 🔥 Force refresh manually
@@ -97,7 +99,7 @@ namespace TaskManagerAppTests.TaskList
             _viewModel.FilterTasksByPriority(Priority.All);
             _viewModel.FilteredTasksView.Refresh();  // 🔥 Force refresh manually
 
-            Assert.AreEqual(2, _viewModel._taskList.SizeOfTheList);
+            Assert.AreEqual(2, _viewModel.Tasks.Count);
         }
 
         [TestMethod()]
@@ -108,7 +110,7 @@ namespace TaskManagerAppTests.TaskList
             _viewModel.FilterTasksByStatus(Status.All);
             _viewModel.FilteredTasksView.Refresh();  // 🔥 Force refresh manually
 
-            Assert.AreEqual(2, _viewModel._taskList.SizeOfTheList);
+            Assert.AreEqual(2, _viewModel.Tasks.Count);
         }
 
         [TestMethod()]
@@ -120,8 +122,8 @@ namespace TaskManagerAppTests.TaskList
             _task.EditTask("Task 1", "Description", DateTime.Now, Priority.Low, Status.Pending);
             _task2.EditTask("Task 2", "Description", DateTime.Now, Priority.Low, Status.Completed);
 
-            _viewModel._taskList.UpdateTask(_task);
-            _viewModel._taskList.UpdateTask(_task2);
+            _viewModel.TaskList.UpdateTask(_task);
+            _viewModel.TaskList.UpdateTask(_task2);
 
             _viewModel.FilterTasksByPriority(Priority.High);
             _viewModel.FilteredTasksView.Refresh();
@@ -137,7 +139,7 @@ namespace TaskManagerAppTests.TaskList
 
             _task.EditTask("Test", "Show Testing", DateTime.Now, Priority.Medium, Status.Pending);
 
-            _viewModel._taskList.UpdateTask(_task);
+            _viewModel.TaskList.UpdateTask(_task);
 
             _viewModel.FilterTasksByStatus(Status.Completed);
             _viewModel.FilteredTasksView.Refresh();  // 🔥 Force refresh manually

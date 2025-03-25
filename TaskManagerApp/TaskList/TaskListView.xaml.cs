@@ -9,53 +9,54 @@ namespace TaskManagerApp.TaskList
 {
     public partial class TaskListView
     {
-        public TaskListViewModel ViewModel { get; set; }
-        public TaskList SelectedTaskList { get; set; }
+        public TaskListViewModel TaskListViewModel { get; set; }
 
         public TaskListView(TaskListViewModel viewModel)
         {
             InitializeComponent();
-            ViewModel = viewModel;
-            SelectedTaskList = viewModel._taskList;
-            this.Closed += TaskListView_Closed;
+            TaskListViewModel = viewModel;
+            DataContext = TaskListViewModel;
         }
 
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
+            var addTaskWindow = new AddTaskWindow();
+
+            if (addTaskWindow.ShowDialog() == true)
             {
-                var addTaskWindow = new AddTaskWindow();
-                if (addTaskWindow.ShowDialog() == true)
+                try
                 {
-                    try
+                    Task? newTask = addTaskWindow.NewTask;
+
+                    if (newTask != null)
                     {
-                        var newTask = addTaskWindow.TaskToEdit;
-                        ViewModel.AddTask(newTask);
+                        TaskListViewModel.AddTask(newTask);
                     }
-                    catch (ValidationException ex)
-                    {
-                        ShowErrorMessage(ex.Message);
-                        LogError(ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        ShowErrorMessage("An unexpected error occurred while adding the task.");
-                        LogError(ex.Message);
-                    }
+                }
+                catch (ValidationException ex)
+                {
+                    ShowErrorMessage(ex.Message);
+                    LogError(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    ShowErrorMessage("An unexpected error occurred while adding the task.");
+                    LogError(ex.Message);
                 }
             }
         }
 
         private void RemoveTaskButton_Click(object sender, RoutedEventArgs e)
         {
+            if (TaskListViewModel.SelectedTask == null)
+            {
+                ShowErrorMessage("Please select a task to remove.");
+                return;
+            }
+
             if (ShowConfirmationDialog("Are you sure you want to remove this task?"))
             {
-                ViewModel.RemoveTask(ViewModel._selectedTask);
-            }
-            else
-            {
-                string message = "Please select a task to remove.";
-                ShowErrorMessage(message);
-                LogError(message);
+                TaskListViewModel.RemoveTask(TaskListViewModel.SelectedTask);
             }
         }
 
@@ -66,7 +67,7 @@ namespace TaskManagerApp.TaskList
                 (Priority?)Enum.Parse(typeof(Priority),
                 selectedItem.Tag.ToString()
                 ?? throw new InvalidOperationException());
-            ViewModel.FilterTasksByPriority(selectedPriority);
+            TaskListViewModel.FilterTasksByPriority(selectedPriority);
         }
 
         private void StatusFilterComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -76,18 +77,26 @@ namespace TaskManagerApp.TaskList
                 (Status?)Enum.Parse(typeof(Status),
                     selectedItem.Tag.ToString()
                     ?? throw new InvalidOperationException());
-            ViewModel.FilterTasksByStatus(selectedStatus);
+            TaskListViewModel.FilterTasksByStatus(selectedStatus);
         }
 
         private void TasksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TasksListView.SelectedItem is Task selectedTask)
             {
+                TaskListViewModel.SelectedTask = selectedTask;
                 SelectedTaskDetails.Text = $"Selected Task: {selectedTask.Name} (Status: {selectedTask.Status})";
 
-                // Open TaskView and handle completion
                 var taskView = new TaskView(selectedTask);
-                taskView.TaskCompleted += (completedTask) => ViewModel.RemoveTask(completedTask);
+                taskView.TaskCompleted += (task) =>
+                {
+                    selectedTask.Status = Status.Completed;
+                    TaskListViewModel.FilteredTasksView.Refresh();
+                };
+                taskView.TaskEdited += (task) =>
+                {
+                    TaskListViewModel.FilteredTasksView.Refresh();
+                };
                 taskView.ShowDialog();
             }
             else
@@ -96,31 +105,15 @@ namespace TaskManagerApp.TaskList
             }
         }
 
-        private static void ShowErrorMessage(string message)
-        {
-            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+        private static void ShowErrorMessage(string message) => MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        private static bool ShowConfirmationDialog(string message) => MessageBox.Show(message, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+        private static void LogError(string message) => File.AppendAllText("error_log.txt", $"{DateTime.Now}: {message}\n");
 
-        private static bool ShowConfirmationDialog(string message)
-        {
-            return MessageBox.Show(message, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) ==
-                   MessageBoxResult.Yes;
-        }
-
-        private static void LogError(string message)
-        {
-            File.AppendAllText("error_log.txt", $"{DateTime.Now}: {message}\n");
-        }
-
-        private void GoBackButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            this.Close();
-        }
+        private void GoBackButton_Click(object sender, RoutedEventArgs e) => Close();
 
         private void TaskListView_Closed(object? sender, EventArgs e)
         {
-            Application.Current.MainWindow?.Show(); // Show the existing MainWindow
+            Application.Current.MainWindow?.Show();
         }
     }
 }

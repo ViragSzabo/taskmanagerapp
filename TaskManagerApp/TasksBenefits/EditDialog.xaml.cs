@@ -5,7 +5,7 @@ namespace TaskManagerApp.TasksBenefits
 {
     public partial class EditDialog : Window
     {
-        public Task Task { get; set; }
+        public required Task Task { get; set; }
 
         public EditDialog()
         {

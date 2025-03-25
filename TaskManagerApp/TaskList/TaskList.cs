@@ -1,30 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection.PortableExecutable;
+using System.Windows;
 using System.Xml.Serialization;
+using TaskManagerApp.HomePage;
 using TaskManagerApp.TasksBenefits;
 
 namespace TaskManagerApp.TaskList
 {
     [Serializable]
+    [XmlRoot("TaskList")]
     [XmlType("TaskList")]
     public class TaskList : INotifyPropertyChanged
     {
+        [XmlArray("Tasks"), XmlArrayItem("Task")]
+        public ObservableCollection<Task> Tasks { get; set; }
 
-        [XmlArray("Tasks")]
-        [XmlArrayItem("Task")]
-        public List<Task> TasksList { get; set; }
-
-
-        public ObservableCollection<Task> tasks { get; set; }
-
-        private string _name;
+        private string? _name;
 
         [XmlElement("Name")]
-        public string Name
+        public string? Name
         {
             get => _name;
             set
@@ -35,61 +31,58 @@ namespace TaskManagerApp.TaskList
         }
 
         [XmlElement("SizeOfTheList")]
-        public int SizeOfTheList => tasks.Count;
+        public int SizeOfTheList => Tasks.Count;
 
-        // Make PropertyChanged public
         public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         public TaskList(string listName)
         {
             Name = listName;
-            tasks = new ObservableCollection<Task>();
+            Tasks = new ObservableCollection<Task>();
         }
 
         public TaskList()
         {
             Name = "Unknown";
-            tasks = new ObservableCollection<Task>();
+            Tasks = new ObservableCollection<Task>();
         }
 
         public void AddTask(Task task)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
-            tasks.Add(task);
-            OnPropertyChanged(nameof(SizeOfTheList)); // Notify that SizeOfTheList has changed
+            Tasks.Add(task);
+            OnPropertyChanged(nameof(SizeOfTheList));
+            (Application.Current.MainWindow.DataContext as MainViewModel)?.UpdateHighPriorityTasks();
         }
 
         public void RemoveTask(Task task)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
-            tasks.Remove(task);
-            OnPropertyChanged(nameof(SizeOfTheList)); // Notify that SizeOfTheList has changed
+            Tasks.Remove(task);
+            OnPropertyChanged(nameof(SizeOfTheList));
+            (Application.Current.MainWindow.DataContext as MainViewModel)?.UpdateHighPriorityTasks();
         }
 
         public void UpdateTask(Task specificTask)
         {
-            var existingTask = this.tasks.FirstOrDefault(t => t.Id == specificTask.Id);
+            if (specificTask == null) throw new ArgumentNullException(nameof(specificTask));
+
+            var existingTask = this.Tasks.FirstOrDefault(t => t.Id == specificTask.Id);
             if (existingTask != null)
             {
                 existingTask.EditTask(
-                    specificTask.Name,
+                    specificTask.Name ?? "Untitled",
                     specificTask.Description,
                     specificTask.DueDateTime,
                     specificTask.Priority,
                     specificTask.Status);
 
-                OnPropertyChanged(nameof(SizeOfTheList));
+                OnPropertyChanged(nameof(Tasks));
             }
         }
 
-        public override string? ToString()
-        {
-            return this.Name;
-        }
+        public override string? ToString() => this.Name;
+
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

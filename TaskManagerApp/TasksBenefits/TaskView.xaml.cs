@@ -7,6 +7,7 @@ namespace TaskManagerApp.TasksBenefits
     {
         public Task SelectedTask { get; set; }
         public event Action<Task>? TaskCompleted;
+        public event Action<Task>? TaskEdited;
 
         public TaskView(Task task)
         {
@@ -49,20 +50,15 @@ namespace TaskManagerApp.TasksBenefits
             Close();
         }
 
-        public void TaskListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            // Get the selected task from the ListBox
-            if (TaskListBox.SelectedItem is Task selectedTask)
-            {
-                SelectedTask = selectedTask;  // Update the SelectedTask property
-                DataContext = null;           // Reset the DataContext to update UI bindings
-                DataContext = this;           // Rebind the updated task
-            }
-        }
-
         public void EditTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            EditDialog editDialog = new EditDialog
+            if (string.IsNullOrEmpty(SelectedTask.Name))
+            {
+                MessageBox.Show(SelectedTask.Name);
+                return;
+            }
+
+            var editDialog = new EditDialog
             {
                 Task = SelectedTask
             };
@@ -81,6 +77,8 @@ namespace TaskManagerApp.TasksBenefits
                         editDialog.Task.Status);
 
                     MessageBox.Show($"Task '{SelectedTask.Name}' updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    TaskEdited?.Invoke(SelectedTask);
                     DataContext = null; // Reset the DataContext to update UI bindings
                     DataContext = this; // Rebind the updated task
                 }

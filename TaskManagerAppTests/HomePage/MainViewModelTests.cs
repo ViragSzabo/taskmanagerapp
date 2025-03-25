@@ -1,39 +1,43 @@
 ﻿using TaskManagerApp.HomePage;
 
-public class MainViewModelTests
+namespace TaskManagerAppTests.HomePage
 {
-    [TestMethod()]
-    public async Task LoadDataAsync_CreatesDefaultLists_WhenFileNotFound()
+    [TestClass()]
+    public class MainViewModelTests
     {
-        var viewModel = new MainViewModel();
-        var initialCount = viewModel.ListOfListCollection.Count;
+        [TestMethod()]
+        public async Task LoadDataAsync_CreatesDefaultLists_WhenFileNotFound()
+        {
+            MainViewModel viewModel = new MainViewModel();
+            var initialCount = viewModel.ListOfLists.Count;
 
-        await Task.Delay(500); // Allow async operations to complete
+            await Task.Delay(500);
 
-        Assert.IsTrue(viewModel.ListOfListCollection.Count > initialCount);
-    }
+            Assert.IsTrue(viewModel.ListOfLists.Count > initialCount, "The ListOfLists count should have increased.");
+        }
 
-    [TestMethod()]
-    public void AddTaskList_ShouldIncreaseCount_WhenValidNameProvided()
-    {
-        var viewModel = new MainViewModel();
-        var initialCount = viewModel.ListOfListCollection.Count;
+        [TestMethod()]
+        public void AddTaskList_ShouldIncreaseCount_WhenValidNameProvided()
+        {
+            MainViewModel viewModel = new MainViewModel();
+            var initialCount = viewModel.ListOfLists.Count;
 
-        viewModel.AddTaskList("Test List");
+            viewModel.AddTaskList("Test List");
 
-        Assert.AreEqual(initialCount + 1, viewModel.ListOfListCollection.Count);
-    }
+            Assert.AreEqual(initialCount + 1, viewModel.ListOfLists.Count, "Adding a new task list should increase the count by 1.");
+        }
 
-    [TestMethod()]
-    public async Task SaveToFileAsync_ShouldCreateFile()
-    {
-        var viewModel = new MainViewModel();
-        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "TestFile.xml");
+        [TestMethod()]
+        public async Task SaveToFileAsync_ShouldCreateFile()
+        {
+            MainViewModel viewModel = new MainViewModel();
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "TestFile.xml");
 
-        await MainViewModel.SaveToFileAsync(viewModel.ListOfListCollection.ToList(), filePath);
+            await MainViewModel.SaveToFileAsync(viewModel.ListOfLists.ToList(), filePath);
 
-        Assert.IsTrue(File.Exists(filePath));
+            Assert.IsTrue(File.Exists(filePath));
 
-        File.Delete(filePath);
+            File.Delete(filePath);
+        }
     }
 }

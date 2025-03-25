@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace TaskManagerApp.TasksBenefits
 {
-    // To be compatible with XML serialization
     [Serializable]
-    [XmlType("Task")]
+    [XmlRoot("Task")]
     public class Task
     {
-
         [XmlElement("ID")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [XmlElement("Title")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [XmlElement("Description")]
         public string Description { get; set; }
@@ -28,19 +25,21 @@ namespace TaskManagerApp.TasksBenefits
         [XmlElement("Status")]
         public Status Status { get; set; }
 
-        // Change the property to have a public setter
-        [XmlElement("CreatedDateTime")]
+        [XmlElement("CreatedDate")]
         public DateTime CreatedDateTime { get; set; }
 
-        [XmlElement("LastUpdatedDateTime")]
+        [XmlElement("LastUpdatedDate")]
         public DateTime? LastUpdatedDateTime { get; set; }
 
-        public Task() { }
+        public Task()
+        {
+            Name = "Untitled";
+            Description = "Undefined";
+        }
 
-        // Constructor with parameters
         public Task(string name, string description, DateTime dueDateTime)
         {
-            this.Id = Guid.NewGuid().ToString();
+            this.Id = Guid.NewGuid();
             Name = name;
             Description = description;
             DueDateTime = dueDateTime;
@@ -49,21 +48,9 @@ namespace TaskManagerApp.TasksBenefits
             CreatedDateTime = DateTime.Now;
         }
 
-        // Mark the task as complete
-        public void MarkAsComplete()
+        public void EditTask(string updatedName, string updatedDescription, DateTime? updatedDueDateTime, Priority updatedPriority, Status updatedStatus)
         {
-            Status = Status.Completed;
-        }
-
-        // Edit the task asynchronously
-        public void EditTask(
-            string updatedName,
-            string updatedDescription,
-            DateTime? updatedDueDateTime,
-            Priority updatedPriority,
-            Status updatedStatus)
-        {
-            Name = updatedName;
+            Name = updatedName ?? "Untitled";
             Description = updatedDescription;
 
             if (updatedDueDateTime.HasValue)
@@ -76,20 +63,8 @@ namespace TaskManagerApp.TasksBenefits
             LastUpdatedDateTime = DateTime.Now;
         }
 
-        // Optional method: Get display name for priority enum
-        public string GetDisplayName()
-        {
-            return typeof(Priority)
-                .GetField(Priority.ToString())
-                ?.GetCustomAttributes(typeof(DisplayNameAttribute), false)
-                .FirstOrDefault() is DisplayNameAttribute displayName
-                ? displayName.Name
-                : Priority.ToString();
-        }
+        public void MarkAsComplete() => Status = Status.Completed;
 
-        public override string ToString()
-        {
-            return $"{Name} - {Description} (Due: {DueDateTime}, Priority: {Priority}, Status: {Status})";
-        }
+        public override string ToString() => $"{Name} - {Description} (Due: {DueDateTime:yyyy-MM-dd HH:mm}, Priority: {Priority}, Status: {Status})";
     }
 }

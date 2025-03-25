@@ -48,25 +48,19 @@ namespace TaskManagerAppTests.TasksBenefits
             _task.EditTask("Updated Task", "Updated Description", newDueDate, Priority.High, Status.Pending);
 
             Assert.IsNotNull(_task);
-            Assert.IsNotNull(newDueDate);
             Assert.AreEqual("Updated Task", _task.Name);
             Assert.AreEqual("Updated Description", _task.Description);
             Assert.AreEqual(Priority.High, _task.Priority);
             Assert.AreEqual(Status.Pending, _task.Status);
-            Assert.IsNotNull(_task.LastUpdatedDateTime);
-        }
 
-        [TestMethod()]
-        public void GetDisplayName_ReturnsCorrectDisplayName()
-        {
-            string displayName = _task.GetDisplayName();
-            Assert.AreEqual(Priority.Medium.ToString(), displayName);
+            Assert.IsNotNull(_task.LastUpdatedDateTime);
+            Assert.IsTrue(_task.LastUpdatedDateTime.Value <= DateTime.Now);
         }
 
         [TestMethod()]
         public void ToString_ReturnsCorrectFormat()
         {
-            string expected = $"{_task.Name} - {_task.Description} (Due: {_task.DueDateTime}, Priority: {_task.Priority}, Status: {_task.Status})";
+            string expected = $"{_task.Name} - {_task.Description} (Due: {_task.DueDateTime:yyyy-MM-dd HH:mm}, Priority: {_task.Priority}, Status: {_task.Status})";
             Assert.AreEqual(expected, _task.ToString());
         }
     }

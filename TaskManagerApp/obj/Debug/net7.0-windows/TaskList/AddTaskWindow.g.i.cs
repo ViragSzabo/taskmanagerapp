@@ -84,7 +84,7 @@ namespace TaskManagerApp.TaskList {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/TaskManagerApp;V1.0.0.0;component/tasklist/addtaskwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/TaskManagerApp;component/tasklist/addtaskwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\TaskList\AddTaskWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
