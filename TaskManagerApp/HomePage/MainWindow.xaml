@@ -39,7 +39,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Red" FontSize="12"/>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#FF2400" FontSize="12"/>
                             <TextBlock Text=" (Due: " Foreground="Gray"/>
                             <TextBlock Text="{Binding DueDateTime, StringFormat=\{0:MMM dd\}}" Foreground="Gray"/>
                             <TextBlock Text=")" Foreground="Gray"/>
@@ -70,7 +70,7 @@
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="#3498DB"/>
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#ECF0F1"/>

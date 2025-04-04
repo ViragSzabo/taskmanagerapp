@@ -62,7 +62,7 @@
                         BorderBrush="Transparent" Cursor="Hand"/>
                 <Button Content="Remove Task" Click="RemoveTaskButton_Click" 
                         Width="120" Margin="5" 
-                        Background="#E74C3C" Foreground="White"
+                        Background="#FF2400" Foreground="White"
                         FontWeight="Bold" Padding="8,5"
                         BorderBrush="Transparent" Cursor="Hand"/>
             </StackPanel>
