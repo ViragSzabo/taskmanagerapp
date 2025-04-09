@@ -1,57 +1,51 @@
-# Task Manager Application
-## NHL Stenden | Final Assignment | C#2
+# 🗂️ Task Manager Application
+## Final Assignment — NHL Stenden | C#2
 
-## Overview
-The **Task Manager Application** is a user-friendly platform designed to help individuals efficiently manage their tasks. Built with **C#** and **WPF**, the app enables users to create, view, and track tasks seamlessly. The application supports task prioritization and completion tracking.
+The Task Manager Application is a lightweight desktop tool that allows users to create, track, and manage tasks through a clean and intuitive interface. Developed with C# and WPF, it offers essential features to streamline task communities and enhance productivity.
 
-## Installation
-To get started with the Task Manager Application, follow these steps:
+## 📌 Version Notice
+🔔 The v5.0 branch contains the latest and most complete version of the Task Manager Application. Please switch to this branch for the newest features, updates, and improvements.
 
-1. **Clone the Repository**:  
-   Clone the repository to your local machine using the following command:
-   ```bash
-   git clone https://github.com/yourusername/TaskManagerApp.git
-2. **Open the Project:**:
-   Open the solution file (TaskManagerApp.sln) in Visual Studio.
-4. **Build the Project:**:
-   Press Ctrl+Shift+B to build the project.
-5. **Run the Application:**
-   Press F5 or click the "Start" button to launch the application.
+## 🚀 Installation
+1. **Clone the repository** from GitHub.
+   git clone https://github.com/your-username/task-manager-app.git
+3. **Open the solution** in [Visual Studio](https://visualstudio.microsoft.com/de/).
+4. **Build and run** the project using the play/debug button.
 
-## Usage
-Once you launch the Task Manager Application, you can:
+## 📖 Features
+- ✅ **Create Tasks & Lists:** Add new task lists and individual tasks with essential details such as title, description, date, status, and priority.
+- 📋 **View Tasks:** See all your urgent or upcoming tasks in a single, easy-to-read overview on the main board.
+- 📂 **View & Organize Lists:** Switch between different task lists to keep personal, school, or work tasks separate and organized.
+- 🧭 **Filter Tasks:** Easily filter tasks by status _(e.g., Pending, In Progress, Completed)_ or priority _(e.g., High, Medium, Low)_ to focus on what matters you the most.
+- 🛠️ **Manage Tasks:** Update or delete tasks to keep everything clean and current.
+- 💾 **Auto-Save & Load Tasks:** All task data is automatically saved to a local file and reloaded on app startup — no need for manual saving.
+- 🔁 **Persistent Storage:** Tasks and lists persist even after the application is closed, ensuring your progress is never lost.
 
-- **Create Tasks:** Use the task creation form to add new tasks to your task lists. You can set deadlines, priorities, and descriptions.
-- **View Tasks or Lists:** Browse through your tasks in the main interface. Tasks are organized by lists, and you can filter by high-priority tasks.
-- **Manage Tasks:** Edit or delete tasks as needed. You can also mark tasks as completed.
-- **Task Lists:** Organize your tasks into different lists (e.g., Personal, Work, Study) to keep track of your priorities.
-- **Remove Tasks or Lists:** Organize the unnecessary tasks and lists from the application.
-- **Download Tasks and Lists:** See a document of your lists and tasks.
+## 📌 Usage
+After launching the application:
+1. Select an **existing list** to view, add, update or remove tasks.
+2. Check your **urgent task** immediately on the main board.
+4. Create or delete **task lists** as needed for better organization.
 
-## Features
+## 🛠️ Technology Stack
+- **Programming Language:** C#
+- **UI Framework:** Windows Presentation Foundation (WPF)
+- **Platform:** .NET Framework
+- **IDE:** Visual Studio
+  
+## 🧭 Version Control
+All development and version control are maintained on GitHub for transparency and continuous improvement.
 
-- **Task Creation:** Add tasks with descriptions, due dates, and priorities.
-- **Task Management:** Edit, delete, and mark tasks as completed.
-- **High-Priority Tasks:** Easily view and manage tasks marked as high priority.
-- **Task Lists:** Create different task lists and manage tasks within them.
-- **Data Persistence:** Tasks are saved to an XML file for persistence, ensuring your tasks are available the next time you open the app.
-- **User Interface Enhancements:** Improved the UI with themes, customizable layouts, or better navigation options within the v5.0 from the previous versions.
+## 📬 Contact
+For suggestions, bugs, or support, reach out: 
+💼 [Virág Szabó on LinkedIn](https://www.linkedin.com/in/virag-s-082a24141/)
+📧 [virag.szabo@student.nhlstenden.com](mailto:virag.szabo@student.nhlstenden.com)
 
-## Future Enchancements
-- **User Authentication:** Implement user login and registration functionality to allow multiple users to have personalized task lists.
-- **Search Functionality:** Add a search feature to help users quickly find tasks based on keywords.
-- **Mobile Compatibility:** Develop a mobile version of the application for on-the-go task management.
-- **Collaboration Features:** Enable task sharing and collaboration among users.
-- **Analytics Dashboard:** Create a window to provide insights into user productivity, such as task completion trends or time spent on tasks.
-
-## Contact
-For further assistance, bug reports, or feedback, please contact the developer at:
-**Email:** virag.szabo@student.nhlstenden.com
-
-## Version Control
-This project is maintained on GitHub, where all changes are tracked for accountability and version history. You can view the repository here.
-
-## Technology Stack
-**C#:** The primary programming language used for the backend logic.
-**WPF (Windows Presentation Foundation):** Used for creating the user interface.
-**.NET Framework:** Handles data serialization and file I/O operations.
+## 🌟 Future Enchancements
+Here are some ideas planned for future development:
+- 🔐 **User Authentication** — Support for login/registration and personalized task environments.
+- 🔍 **Search Functionality** — Quickly locate tasks using keyword search.
+- 🎨 **UI Enhancements** — Themes, layout options, and dark mode support.
+- 📱 **Mobile Version** — A responsive mobile-friendly version for on-the-go task management.
+- 🤝 **Collaboration Tools** — Share and collaborate on tasks with others.
+- 📊 **Analytics Dashboard** — Track productivity with visual insights _(e.g., task completion trends)_.
