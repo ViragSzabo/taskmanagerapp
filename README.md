@@ -1,7 +1,7 @@
 # 🗂️ Task Manager Application
 ## Final Assignment — NHL Stenden | C#2
 
-The Task Manager Application is a lightweight desktop tool that allows users to create, track, and manage tasks through a clean and intuitive interface. Developed with C# and WPF, it offers essential features to streamline task communities and enhance productivity.
+The Task Manager Application is a lightweight desktop tool that allows users to create, track, and manage tasks through a clean and intuitive interface. Developed with C# and WPF, it offers essential features to streamline task management and enhance productivity.
 
 ## 📌 Version Notice
 🔔 The v5.0 branch contains the latest and most complete version of the Task Manager Application. Please switch to this branch for the newest features, updates, and improvements.
@@ -24,7 +24,7 @@ The Task Manager Application is a lightweight desktop tool that allows users to 
 ## 📌 Usage
 After launching the application:
 1. Select an **existing list** to view, add, update or remove tasks.
-2. Check your **urgent task** immediately on the main board.
+2. Quickly check your most **urgent task** on the main board.
 4. Create or delete **task lists** as needed for better organization.
 
 ## 🛠️ Technology Stack
@@ -41,7 +41,7 @@ For suggestions, bugs, or support, reach out:
 💼 [Virág Szabó on LinkedIn](https://www.linkedin.com/in/virag-s-082a24141/)
 📧 [virag.szabo@student.nhlstenden.com](mailto:virag.szabo@student.nhlstenden.com)
 
-## 🌟 Future Enchancements
+## 🌟 Future Enhancements
 Here are some ideas planned for future development:
 - 🔐 **User Authentication** — Support for login/registration and personalized task environments.
 - 🔍 **Search Functionality** — Quickly locate tasks using keyword search.
